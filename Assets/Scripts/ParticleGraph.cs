@@ -39,7 +39,7 @@ public class ParticleGraph : MonoBehaviour {
         return Mathf.Exp(1 - x*x - z*z);
     }
     static float sphere_top(float x, float z) {
-        return Mathf.Sqrt(4 - x * x - z * z);
+        return Mathf.Sqrt(1 - x * x - z * z);
     }
     static float sphere_bottom(float x, float z) {
         return -Mathf.Sqrt(4 - x * x - z * z);
@@ -61,7 +61,7 @@ public class ParticleGraph : MonoBehaviour {
         float z_val = z_min;
         float incr = 1f / resolution;
 
-        GraphFunc func = normal_distr;
+		GraphFunc func = sin_xz;
         //GraphFunc func_1 = sphere_bottom;
 
         // all this needs to happen on the GPU. oh boy
