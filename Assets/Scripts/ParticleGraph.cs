@@ -2,23 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 [RequireComponent(typeof(ParticleSystem))]
 public class ParticleGraph : MonoBehaviour {
 
     public int resolution = 10; // no. of particles between whole numbers
-    public int x_min = -5, 
+    public int x_min = -5,
         z_min = -5,
+        y_min = -2,
         x_max = 5,
-        z_max = 5; // bounds on our graph axes
-
-    public int y_min = -2, y_max = 2;
-
-    public int size_x, size_z; // size of actual graph in world units
-    // scale the graph of particles to fit this, centered at origin
+        z_max = 5,
+        y_max = 2; // bounds on our graph axes
 
     public ParticleSystem ps;
 
     public ParticleSystem.Particle[] particles;
+
+    public float spinRate;
 
     private int n_particles_x, n_particles_z;
     private int n_particles;
@@ -45,7 +46,8 @@ public class ParticleGraph : MonoBehaviour {
         return -Mathf.Sqrt(4 - x * x - z * z);
     }
 
-	void Awake () {
+
+    void Awake () {
         ps = GetComponent<ParticleSystem>();
 
         n_particles_x = (x_max - x_min) * resolution;
@@ -71,9 +73,9 @@ public class ParticleGraph : MonoBehaviour {
             for (int z = 0; z < n_particles_z; z++) {
                 x_val = x_min;
                 for (int x = 0; x < n_particles_x; x++) {
-                    particles[i].position = new Vector3(x_val, 
-                        func(x_val, z_val),
-                        z_val);
+                    particles[i].position = new Vector3(x_val / x_max, 
+                        func(x_val, z_val) / y_max,
+                        z_val / z_max);
                     if (particles[i].position.y < y_min || particles[i].position.y > y_max) {
                         particles[i].startColor = Color.clear; // particles outside of y-bounds are invisible
                     }
@@ -91,8 +93,18 @@ public class ParticleGraph : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        //ps.GetParticles(particles);
 
-        //ps.SetParticles(particles, particles.Length);
+        //perform a slow spinning
+        ps.GetParticles(particles);
+        for (int i=0; i<n_particles; i++) {
+            Vector3 pos = particles[i].position;
+            float x = pos.x;
+            float z = pos.z;
+            float theta = spinRate * Time.deltaTime;
+            pos.x = x * Mathf.Cos(theta) - z * Mathf.Sin(theta);
+            pos.z = z * Mathf.Cos(theta) + x * Mathf.Sin(theta);
+            particles[i].position = pos;
+        }
+        ps.SetParticles(particles, particles.Length);
     }
 }
