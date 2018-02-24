@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlowSpin : MonoBehaviour {
+public class AxesSpin : MonoBehaviour {
 
     public float spinRate = 1f;
+    public Transform[] labels;
 
 	// Use this for initialization
 	void Start () {
@@ -20,8 +21,18 @@ public class SlowSpin : MonoBehaviour {
         while (true) {
             float interval = 0.02f; // seconds
             Vector3 rot = this.transform.rotation.eulerAngles;
-            rot.y += Mathf.Rad2Deg * spinRate * interval;
+            float delta_theta = Mathf.Rad2Deg * spinRate * interval; // change in y-rotation
+            rot.y += delta_theta;
             this.transform.rotation = Quaternion.Euler(rot);
+
+            // unspin each label
+            if (labels != null) {
+                for (int i=0; i<labels.Length; i++) {
+                    Vector3 localRot = labels[i].rotation.eulerAngles;
+                    localRot.y -= delta_theta;
+                    labels[i].transform.rotation = Quaternion.Euler(localRot);
+                }
+            }
             yield return new WaitForSeconds(interval);
         }
     }

@@ -15,6 +15,8 @@ public class ParticleGraph : MonoBehaviour {
         z_max = 5,
         y_max = 2; // bounds on our graph axes
 
+    public float graph_scale_factor;
+
     public ParticleSystem ps;
 
     public ParticleSystem.Particle[] particles;
@@ -37,7 +39,7 @@ public class ParticleGraph : MonoBehaviour {
         return Mathf.Cos(x) * Mathf.Sin(z);
     }
     static float normal_distr(float x, float z) {
-        return Mathf.Exp(1 - x*x - z*z);
+        return Mathf.Exp(1 - x*x - z*z) / Mathf.Exp(1);
     }
     static float sphere_top(float x, float z) {
         return Mathf.Sqrt(1 - x * x - z * z);
@@ -114,7 +116,7 @@ public class ParticleGraph : MonoBehaviour {
         float z_val = z_min;
         float incr = 1f / resolution;
 
-		GraphFunc func = normal_distr;
+		GraphFunc func = cos_x_sin_z;
         //GraphFunc func_1 = sphere_bottom;
 
         // all this needs to happen on the GPU. oh boy
@@ -124,15 +126,16 @@ public class ParticleGraph : MonoBehaviour {
             for (int z = 0; z < n_particles_z; z++) {
                 x_val = x_min;
                 for (int x = 0; x < n_particles_x; x++) {
-                    particles[i].position = new Vector3(x_val / x_max, 
-                        func(x_val, z_val) / y_max,
-                        z_val / z_max);
+                    particles[i].position = new Vector3(x_val / x_max * graph_scale_factor, 
+                        func(x_val, z_val) / y_max * graph_scale_factor,
+                        z_val / z_max * graph_scale_factor);
                     if (particles[i].position.y < y_min || particles[i].position.y > y_max) {
                         particles[i].startColor = Color.clear; // particles outside of y-bounds are invisible
                     }
                     else particles[i].startColor =
-                            Color.HSVToRGB((particles[i].position.y / 10) + 0.2f, 1, 1);
-                    particles[i].startSize = 0.1f;
+                            Color.HSVToRGB(particles[i].position.y / (y_max*2) + 0.5f, 1, 1); //normalize [-ymax, ymax] to [0,1]
+                    //particles[i].startColor = new Color(particles[i].startColor.r, particles[i].startColor.g, particles[i].startColor.b, 0.5f);
+                    particles[i].startSize = 0.02f;
                     x_val += incr;
                     i++;
                 }
@@ -144,7 +147,7 @@ public class ParticleGraph : MonoBehaviour {
 
     private void Start() {
         StartCoroutine(spin_particles());
-        StartCoroutine(scale_particles());
+        //StartCoroutine(scale_particles());
     }
 
     // Update is called once per frame
