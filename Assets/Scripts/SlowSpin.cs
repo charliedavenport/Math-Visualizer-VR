@@ -8,16 +8,21 @@ public class SlowSpin : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+        StartCoroutine(spin());
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        
-        Vector3 rot = this.transform.rotation.eulerAngles;
-        rot.y += Mathf.Rad2Deg * spinRate * Time.deltaTime;
-        this.transform.rotation = Quaternion.Euler(rot);
-        
-        
+
+    }
+
+    IEnumerator spin() {
+        while (true) {
+            float interval = 0.02f; // seconds
+            Vector3 rot = this.transform.rotation.eulerAngles;
+            rot.y += Mathf.Rad2Deg * spinRate * interval;
+            this.transform.rotation = Quaternion.Euler(rot);
+            yield return new WaitForSeconds(interval);
+        }
     }
 }

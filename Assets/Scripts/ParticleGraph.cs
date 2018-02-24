@@ -46,6 +46,57 @@ public class ParticleGraph : MonoBehaviour {
         return -Mathf.Sqrt(4 - x * x - z * z);
     }
 
+    private ParticleSystem.Particle[] rotate_particles(ParticleSystem.Particle[] part, float rate) {
+        int n_part = part.Length;
+        for (int i = 0; i < n_part; i++) {
+            Vector3 pos = part[i].position;
+            float x = pos.x;
+            float z = pos.z;
+            float theta = rate * Time.deltaTime;
+            pos.x = x * Mathf.Cos(theta) - z * Mathf.Sin(theta);
+            pos.z = z * Mathf.Cos(theta) + x * Mathf.Sin(theta);
+            part[i].position = pos;
+        }
+        return part;
+    }
+
+    IEnumerator spin_particles() {
+        while (true) {
+            ps.GetParticles(particles);
+            n_particles = particles.Length;
+            float interval = 0.02f; // seconds
+            for (int i = 0; i < n_particles; i++) {
+                Vector3 pos = particles[i].position;
+                float x = pos.x;
+                float z = pos.z;
+                float theta = spinRate * interval;
+                pos.x = x * Mathf.Cos(theta) - z * Mathf.Sin(theta);
+                pos.z = z * Mathf.Cos(theta) + x * Mathf.Sin(theta);
+                particles[i].position = pos;
+            }
+            ps.SetParticles(particles, n_particles);
+            yield return new WaitForSeconds(interval);
+        }
+    }
+
+    IEnumerator scale_particles() {
+        float time = 0f;
+        float interval = 0.02f;
+        float scale_factor = 1f;
+        while (true) {
+            ps.GetParticles(particles);
+            n_particles = particles.Length;
+            for (int i = 0; i < n_particles; i++) {
+                Vector3 pos = particles[i].position;
+                scale_factor = (0.01f * Mathf.Sin(time)) + 1.0f;
+                pos *= scale_factor;
+                particles[i].position = pos;
+            }
+            ps.SetParticles(particles, n_particles);
+            time += interval;
+            yield return new WaitForSeconds(interval);
+        }
+    }
 
     void Awake () {
         ps = GetComponent<ParticleSystem>();
@@ -63,7 +114,7 @@ public class ParticleGraph : MonoBehaviour {
         float z_val = z_min;
         float incr = 1f / resolution;
 
-		GraphFunc func = sin_xz;
+		GraphFunc func = normal_distr;
         //GraphFunc func_1 = sphere_bottom;
 
         // all this needs to happen on the GPU. oh boy
@@ -90,21 +141,14 @@ public class ParticleGraph : MonoBehaviour {
 
         ps.SetParticles(particles, particles.Length);
     }//Awake()
-	
-	// Update is called once per frame
-	void Update () {
 
-        //perform a slow spinning
-        ps.GetParticles(particles);
-        for (int i=0; i<n_particles; i++) {
-            Vector3 pos = particles[i].position;
-            float x = pos.x;
-            float z = pos.z;
-            float theta = spinRate * Time.deltaTime;
-            pos.x = x * Mathf.Cos(theta) - z * Mathf.Sin(theta);
-            pos.z = z * Mathf.Cos(theta) + x * Mathf.Sin(theta);
-            particles[i].position = pos;
-        }
-        ps.SetParticles(particles, particles.Length);
+    private void Start() {
+        StartCoroutine(spin_particles());
+        StartCoroutine(scale_particles());
+    }
+
+    // Update is called once per frame
+    void Update () {
+
     }
 }
