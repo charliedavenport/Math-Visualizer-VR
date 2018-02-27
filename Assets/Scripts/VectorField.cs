@@ -23,6 +23,13 @@ public class VectorField : MonoBehaviour {
         return input;
     }
 
+    private Vector3 normalize_pos(Vector3 pos)
+    {
+        return new Vector3(pos.x / Mathf.Max(Mathf.Abs(x_max), Mathf.Abs(x_min)) * scale_factor,
+            pos.y / Mathf.Max(Mathf.Abs(y_max), Mathf.Abs(y_min)) * scale_factor,
+            pos.z / Mathf.Max(Mathf.Abs(z_max), Mathf.Abs(z_min)) * scale_factor);
+    }
+
     private void Awake() {
         ps = GetComponent<ParticleSystem>();
 
@@ -42,8 +49,29 @@ public class VectorField : MonoBehaviour {
 
         VectorFunc func = identity;
 
+        int i = 0;
+        for (int x = 0; x < n_vectors_x; x++)
+        {
+            y_val = y_min;
+            for(int y = 0; y < n_vectors_y; y++)
+            {
+                z_val = z_min;
+                for (int z = 0; z < n_vectors_z; z++)
+                {
+                    vectors[i].position = normalize_pos(new Vector3(x_val, y_val, z_val));
+                    vectors[i].startSize = 0.1f;
+                    z_val += incr;
+                    i++;
+                }
 
-    }
+                y_val += incr;
+            }
+            x_val += incr;
+        }
+
+        ps.SetParticles(vectors, vectors.Length);
+
+    }//Awake()
 
     // Update is called once per frame
     void Update () {

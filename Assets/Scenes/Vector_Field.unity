@@ -262,7 +262,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 273731515}
   m_LocalRotation: {x: 0.13689007, y: -0.21113332, z: 0.029877132, w: 0.96736306}
-  m_LocalPosition: {x: 0.83, y: 1.59, z: 0.38}
+  m_LocalPosition: {x: 0.33, y: 0.89, z: -2.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -628,6 +628,7 @@ GameObject:
   - component: {fileID: 720163707}
   - component: {fileID: 720163706}
   - component: {fileID: 720163705}
+  - component: {fileID: 720163708}
   m_Layer: 0
   m_Name: Vector Field
   m_TagString: Untagged
@@ -749,7 +750,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -195866386
+  randomSeed: -1703916344
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -4063,6 +4064,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &720163708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 720163704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43a7b2a24d7e9c54180ab32f31cb1be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resolution: 10
+  x_min: -1
+  z_min: -1
+  y_min: -1
+  x_max: 1
+  z_max: 1
+  y_max: 1
+  scale_factor: 1
 --- !u!1 &847479787
 GameObject:
   m_ObjectHideFlags: 0
