@@ -59,7 +59,7 @@ public class VectorField : MonoBehaviour {
                 for (int z = 0; z < n_vectors_z; z++)
                 {
                     vectors[i].position = normalize_pos(new Vector3(x_val, y_val, z_val));
-                    vectors[i].startSize = 0.1f;
+                    vectors[i].startSize = .5f;
                     z_val += incr;
                     i++;
                 }

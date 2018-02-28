@@ -2738,13 +2738,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f8338be5d3f5cb48bab8acb8096b852, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resolution: 20
+  resolution: 30
   x_min: -2
   z_min: -2
-  y_min: -1
+  y_min: -2
   x_max: 2
   z_max: 2
-  y_max: 1
+  y_max: 2
   graph_scale_factor: 1
   ps: {fileID: 0}
   spinRate: -0.25
@@ -2862,7 +2862,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -597567639
+  randomSeed: -1814353033
   InitialModule:
     serializedVersion: 3
     enabled: 1
