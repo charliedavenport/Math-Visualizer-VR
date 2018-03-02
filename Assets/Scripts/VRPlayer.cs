@@ -69,9 +69,6 @@ public class VRPlayer : MonoBehaviour
         head.rotation = hmd.rotation;
         leftHand.transform.rotation = leftController.transform.rotation;
         rightHand.transform.rotation = rightController.transform.rotation;
-
-        
-
     } // LateUpdate
 
     private Vector2 getJoystick(Transform controller)

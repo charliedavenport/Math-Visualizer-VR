@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class HandController : MonoBehaviour
 {
-    //asdf
     public VRPlayer player;
 
     public Rigidbody intersected;
@@ -19,7 +18,6 @@ public class HandController : MonoBehaviour
     public List<GameObject> telePoints = new List<GameObject>(); // used to keep track of game objects
     public GameObject teleHitVisual;
 
-	public Vector2 stick_axis; //control input
 
     // Use this for initialization
     void Start()
@@ -30,6 +28,7 @@ public class HandController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
 
     }
 
