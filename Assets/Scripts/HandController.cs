@@ -19,6 +19,8 @@ public class HandController : MonoBehaviour
     public List<GameObject> telePoints = new List<GameObject>(); // used to keep track of game objects
     public GameObject teleHitVisual;
 
+	public Vector2 stick_axis; //control input
+
     // Use this for initialization
     void Start()
     {

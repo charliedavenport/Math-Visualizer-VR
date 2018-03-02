@@ -148,7 +148,7 @@ public class ParticleGraph : MonoBehaviour {
     }//Awake()
 
     private void Start() {
-        StartCoroutine(spin_particles());
+        //StartCoroutine(spin_particles());
         //StartCoroutine(scale_particles());
     }
 
