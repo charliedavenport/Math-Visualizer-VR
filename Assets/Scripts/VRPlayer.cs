@@ -1,8 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VR;
+using UnityEngine.Networking;
 
-public class VRPlayer : MonoBehaviour
+/// <summary>
+/// /////////////////
+/// </summary>
+public class VRPlayer : NetworkBehaviour
 {
     //public GameLogic gameLogic;
 
