@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HandController : MonoBehaviour
 {
-
+    //asdf
     public VRPlayer player;
 
     public Rigidbody intersected;
