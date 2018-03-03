@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VR;
-public class GUIManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
 
     public GameObject vrCameraRig;
     public GameObject nonVRCameraRig;
     //public Blinker hmdBlinker;
-    //public SteamVR_TrackedObject hmd;
-    //public SteamVR_TrackedObject controllerLeft;
-    //public SteamVR_TrackedObject controllerRight;
+    public SteamVR_TrackedObject hmd2;
+    public SteamVR_TrackedObject controllerLeft;
+    public SteamVR_TrackedObject controllerRight;
     // Use this for initialization
     void Start()
     {
