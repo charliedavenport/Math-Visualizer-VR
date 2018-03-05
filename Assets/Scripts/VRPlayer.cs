@@ -16,9 +16,9 @@ public class VRPlayer : NetworkBehaviour
     public HandController rightHand;
 
     public Transform SteamVR_Rig;
-    public Transform hmd;
-    public Transform leftController;
-    public Transform rightController;
+    //public Transform hmd;
+    //public Transform leftController;
+    //public Transform rightController;
     public Transform feet;
     public SteamVR_TrackedObject hmd2;
     public SteamVR_TrackedObject controllerLeft;
@@ -51,15 +51,17 @@ public class VRPlayer : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-		int leftIndex = (int)leftController.GetComponent<SteamVR_TrackedObject>().index;
-		int rightIndex = (int)rightController.GetComponent<SteamVR_TrackedObject>().index;
+        //int leftIndex = (int)leftController.GetComponent<SteamVR_TrackedObject>().index;
+        //int rightIndex = (int)rightController.GetComponent<SteamVR_TrackedObject>().index;
+        int leftIndex = (int)controllerLeft.index;
+        int rightIndex = (int)controllerRight.index;
 
-		// RIGHT HAND
-		if (rightIndex >= 0)
+        // RIGHT HAND
+        if (rightIndex >= 0)
 		{
 
 
-			Vector2 joyRight = getJoystick(rightController);
+            Vector2 joyRight = getJoystick(controllerRight.transform);//rightController);
 			rightHand.joystick(joyRight);
 
 			float rightTrigger = SteamVR_Controller.Input(rightIndex).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger).magnitude;
@@ -73,7 +75,7 @@ public class VRPlayer : NetworkBehaviour
 		// LEFT HAND
 		if (leftIndex >= 0)
 		{
-			Vector2 joyLeft = getJoystick(leftController);
+            Vector2 joyLeft = getJoystick(controllerLeft.transform);//leftController);
 			leftHand.joystick(joyLeft);
 
 			float leftTrigger = SteamVR_Controller.Input(leftIndex).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger).magnitude;
@@ -98,12 +100,12 @@ public class VRPlayer : NetworkBehaviour
                     controllerRight = gm.controllerRight;
                     //hmdBlinker = gm.hmdBlinker;
                 }
-                //move the SteamVR_rig to the player's position
+                //moves SteamVR_rig to player's position
                 copyTransform(this.transform, SteamVR_Rig.transform);
-                //the controllers are the easy ones, just move them directly
+                //moves controllers directly
                 copyTransform(controllerLeft.transform, leftHand.transform);
                 copyTransform(controllerRight.transform, rightHand.transform);
-                //now move the head to the HMD position, this is actually the eye position
+                //moves head to the HMD position / eye position
                 copyTransform(hmd2.transform, head);
 
                 //move the feet to be in the tracking space, but on the ground (maybe do this with physics to ensure a good foot position later)
@@ -149,6 +151,9 @@ public class VRPlayer : NetworkBehaviour
         rightHand.transform.rotation = rightController.transform.rotation;
     } // LateUpdate*/
 
+    /**
+     *Syncs players so 
+     */
     void CmdSyncPlayer(Vector3 pos, Quaternion rot, Vector3 lhpos, Quaternion lhrot, Vector3 rhpos, Quaternion rhrot)
     {
         head.transform.position = pos;
@@ -165,11 +170,17 @@ public class VRPlayer : NetworkBehaviour
         rightHandRot = rhrot;
 
     }
+
+    /**
+     * Copies Transform
+     */
     private void copyTransform(Transform from, Transform to)
     {
         to.position = from.position;
         to.rotation = from.rotation;
     }
+
+
 
     private Vector2 getJoystick(Transform controller)
     {
