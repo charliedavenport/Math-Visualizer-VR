@@ -1151,17 +1151,23 @@ Prefab:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       objectReference: {fileID: 1451612244}
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 153806236}
 =======
+=======
+>>>>>>> parent of 59ab4a8... pls work
       objectReference: {fileID: 1481397685}
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1383653724}
+<<<<<<< HEAD
+>>>>>>> parent of 59ab4a8... pls work
+=======
 >>>>>>> parent of 59ab4a8... pls work
 =======
       objectReference: {fileID: 364043518}
@@ -1169,6 +1175,7 @@ Prefab:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 370599199}
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 59ab4a83152a3116ea7327548f03cac036282a49
 =======
@@ -1178,6 +1185,9 @@ Prefab:
       value: 
       objectReference: {fileID: 691557924}
 >>>>>>> parent of 600bd24... Added LineRenderer to Vector Field
+=======
+>>>>>>> fe792bd24980a52571f0b274b611b9c3019e105f
+>>>>>>> parent of 59ab4a8... pls work
 =======
 >>>>>>> fe792bd24980a52571f0b274b611b9c3019e105f
 >>>>>>> parent of 59ab4a8... pls work

@@ -150,8 +150,11 @@ public class HandController : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
         //angle = 0 means fully pushed up, 90/-270 means pushed to the left
 <<<<<<< HEAD
+<<<<<<< HEAD
         Vector3 hitPos;
 =======
+=======
+>>>>>>> parent of 59ab4a8... pls work
        // bool validLocation = false;
         Vector3 hitPos = Vector3.zero;
         Vector3 hitDir = Vector3.forward;
@@ -163,7 +166,12 @@ public class HandController : MonoBehaviour
         {
             telePoints[i].SetActive(false);
 <<<<<<< HEAD
+<<<<<<< HEAD
         }
+=======
+        } 
+      //  teleHitVisual.SetActive(false);
+>>>>>>> parent of 59ab4a8... pls work
 =======
         } 
       //  teleHitVisual.SetActive(false);
@@ -188,6 +196,10 @@ public class HandController : MonoBehaviour
                     telePoints.Add(go);
                 } // add points to teleporter if it's not big enough
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+                
+>>>>>>> parent of 59ab4a8... pls work
 =======
                 
 >>>>>>> parent of 59ab4a8... pls work
