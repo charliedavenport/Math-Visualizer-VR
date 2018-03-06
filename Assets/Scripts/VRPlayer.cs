@@ -15,6 +15,8 @@ public class VRPlayer : NetworkBehaviour
     public HandController leftHand;
     public HandController rightHand;
 
+    public GameManager gm;
+
     public Transform SteamVR_Rig;
     //public Transform hmd;
     //public Transform leftController;
@@ -86,7 +88,7 @@ public class VRPlayer : NetworkBehaviour
 
 		} // LEFT HAND
         */
-	}
+    }
 
     //
     private void FixedUpdate()
@@ -97,7 +99,7 @@ public class VRPlayer : NetworkBehaviour
             {
                 if (SteamVR_Rig == null)
                 {
-                    GameManager gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+                    //GameManager gm = GameObject.Find("GameManager").GetComponent<GameManager>();
                     SteamVR_Rig = gm.vrCameraRig.transform;
                     hmd2 = gm.hmd2;
                     controllerLeft = gm.controllerLeft;
@@ -166,7 +168,7 @@ public class VRPlayer : NetworkBehaviour
     /**
      *Syncs players 
      */
-     [Command]
+    [Command]
     void CmdSyncPlayer(Vector3 pos, Quaternion rot, Vector3 lhpos, Quaternion lhrot, Vector3 rhpos, Quaternion rhrot)
     {
         head.transform.position = pos;
@@ -198,6 +200,9 @@ public class VRPlayer : NetworkBehaviour
         int indexLeft = (int)controllerLeft.index;
         int indexRight = (int)controllerRight.index;
 
+
+
+
         /*if (indexRight >= 0)
         {
             if (SteamVR_Controller.Input(indexRight).GetPressDown(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad))
@@ -216,6 +221,8 @@ public class VRPlayer : NetworkBehaviour
 
         Vector2 joyLeft = getJoystick(controllerLeft);
         Vector2 joyRight = getJoystick(controllerRight);
+        Debug.Log(joyRight.x + ", " + joyRight.y);
+
         //leftHand.squeeze(triggerLeft);
         //rightHand.squeeze(triggerRight);
 
@@ -241,26 +248,30 @@ public class VRPlayer : NetworkBehaviour
         if (controller.index >= 0)
         {
             return SteamVR_Controller.Input((int)controller.index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger).magnitude;
-        } else {
+        }
+        else
+        {
             return 0.0f;
         }
     }
 
     private Vector2 getJoystick(SteamVR_TrackedObject controller)
+    {
+        Debug.Log("in getJoystick");
+        /*if ((int)controller.GetComponent<SteamVR_TrackedObject>().index >= 0)
+            return SteamVR_Controller.Input((int)controller.GetComponent<SteamVR_TrackedObject>().index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
+        else
+            return Vector2.zero;*/
+
+        if (controller.index >= 0)
         {
-            /*if ((int)controller.GetComponent<SteamVR_TrackedObject>().index >= 0)
-                return SteamVR_Controller.Input((int)controller.GetComponent<SteamVR_TrackedObject>().index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
-            else
-                return Vector2.zero;*/
-            
-                if (controller.index >= 0)
-                {
-                    return SteamVR_Controller.Input((int)controller.index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);             
-                }else
-                {
-                    return Vector2.zero;
-                }
+            return SteamVR_Controller.Input((int)controller.index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
         }
+        else
+        {
+            return Vector2.zero;
+        }
+    }
     private Vector3 getControllerVelocity(SteamVR_TrackedObject controller)
     {
         Vector3 controllerVelocity = controller.index >= 0 ? SteamVR_Controller.Input((int)controller.index).velocity : Vector3.zero;
@@ -276,11 +287,17 @@ public class VRPlayer : NetworkBehaviour
     public void teleport(Vector3 pos, Vector3 forward)
     {
         //hmdBlinker.blink(.1f);
+        // Vector3 facingDirection = new Vector3(head.forward.x, 0, head.forward.z);
+        // float angleBetween = Vector3.SignedAngle(facingDirection, forward, Vector3.up);
+        //   this.transform.Rotate(Vector3.up, angleBetween, Space.World);
+        // Vector3 offset = pos - feet.position;
+        //  this.transform.Translate(offset, Space.World);
+
+        Vector3 offset = pos - feet.position;
+        SteamVR_Rig.Translate(offset, Space.World);
         Vector3 facingDirection = new Vector3(head.forward.x, 0, head.forward.z);
         float angleBetween = Vector3.SignedAngle(facingDirection, forward, Vector3.up);
-        this.transform.Rotate(Vector3.up, angleBetween, Space.World);
-        Vector3 offset = pos - feet.position;
-        this.transform.Translate(offset, Space.World);
+        SteamVR_Rig.Rotate(Vector3.up, angleBetween, Space.World);
     }
     /*public void fly(Vector2 leftJoystick, Vector2 rightJoystick)
     {
@@ -298,3 +315,5 @@ public class VRPlayer : NetworkBehaviour
 			return Vector2.zero;
     }*/
 }
+
+
