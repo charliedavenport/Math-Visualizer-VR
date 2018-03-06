@@ -18,9 +18,9 @@ public class VRPlayer : NetworkBehaviour
     public GameManager gm;
 
     public Transform SteamVR_Rig;
-    public Transform hmd;
-    public Transform leftController;
-    public Transform rightController;
+    //public Transform hmd;
+    //public Transform leftController;
+    //public Transform rightController;
     public Transform feet;
     public SteamVR_TrackedObject hmd2;
     public SteamVR_TrackedObject controllerLeft;
@@ -47,16 +47,16 @@ public class VRPlayer : NetworkBehaviour
     Quaternion rightHandRot;
     void Start()
     {
-      //  head.transform.position = new Vector3(0, 2, 0);
+       head.transform.position = new Vector3(0, 2, 0);
     }
 
     // Update is called once per frame
     void Update()
-    {
-        int leftIndex = (int)leftController.GetComponent<SteamVR_TrackedObject>().index;
-        int rightIndex = (int)rightController.GetComponent<SteamVR_TrackedObject>().index;
-       // int leftIndex = (int)controllerLeft.index;
-        //int rightIndex = (int)controllerRight.index;
+    {/*
+        //int leftIndex = (int)leftController.GetComponent<SteamVR_TrackedObject>().index;
+        //int rightIndex = (int)rightController.GetComponent<SteamVR_TrackedObject>().index;
+       int leftIndex = (int)controllerLeft.index;
+        int rightIndex = (int)controllerRight.index;
 
         // RIGHT HAND
         if (rightIndex >= 0)
@@ -86,10 +86,10 @@ public class VRPlayer : NetworkBehaviour
 
 
         } // LEFT HAND
-
+		*/
     }
 
-    /*
+    
     private void FixedUpdate()
     {
         if (isLocalPlayer)
@@ -143,31 +143,32 @@ public class VRPlayer : NetworkBehaviour
             rightHand.transform.rotation = rightHandRot;
 
         }
-    }*///mel
-
+    }
+	/*
     private void LateUpdate()
     {
-        head.position = hmd.position;
-        leftHand.transform.position = leftController.position;
-        rightHand.transform.position = rightController.position;
+        head.position = hmd2.transform.position;
+        leftHand.transform.position = controllerLeft.transform.position;
+        rightHand.transform.position = controllerRight.transform.position;
 
-        head.rotation = hmd.rotation;
+        head.rotation = hmd2.transform.rotation;
         leftHand.transform.rotation = leftController.transform.rotation;
         rightHand.transform.rotation = rightController.transform.rotation;
     } // LateUpdate
+	*/
 
     /**
      * Assigns network id 
      */
-    /*  [Command]
+      [Command]
       public void CmdGetAuthority(NetworkIdentity id)
       {
           id.AssignClientAuthority(this.connectionToClient);
-      }*/ //mel
+      }
           /**
            *Syncs players 
            */
-    /* [Command]
+     [Command]
      void CmdSyncPlayer(Vector3 pos, Quaternion rot, Vector3 lhpos, Quaternion lhrot, Vector3 rhpos, Quaternion rhrot)
      {
          head.transform.position = pos;
@@ -183,12 +184,12 @@ public class VRPlayer : NetworkBehaviour
          rightHandPos = rhpos;
          rightHandRot = rhrot;
 
-     }*/ //mel
+     }
 
     /**
      * Copies Transform
      */
-    /* private void copyTransform(Transform origT, Transform newT)
+     private void copyTransform(Transform origT, Transform newT)
      {
          newT.position = origT.position;
          newT.rotation = origT.rotation;
@@ -199,7 +200,7 @@ public class VRPlayer : NetworkBehaviour
          int indexLeft = (int)controllerLeft.index;
          int indexRight = (int)controllerRight.index;
 
- *///mel
+ 
 
 
     /*if (indexRight >= 0)
@@ -210,7 +211,7 @@ public class VRPlayer : NetworkBehaviour
         }
     }*/
 
-    /*   leftHand.controllerVelocity = getControllerVelocity(controllerLeft);
+      leftHand.controllerVelocity = getControllerVelocity(controllerLeft);
        rightHand.controllerVelocity = getControllerVelocity(controllerRight);
        leftHand.controllerAngularVelocity = getControllerAngularVelocity(controllerLeft);
        rightHand.controllerAngularVelocity = getControllerAngularVelocity(controllerRight);
@@ -226,20 +227,20 @@ public class VRPlayer : NetworkBehaviour
        //rightHand.squeeze(triggerRight);
 
        switch (locomotionMode)
-       {*/ //mel
+       { 
            /*case LocomotionMode.FLYING:
                {
                    fly(joyLeft, joyRight);
                    break;
                }*/
-           /*case LocomotionMode.TELEPORT:
+           case LocomotionMode.TELEPORT:
                            {
                                leftHand.joystick(joyLeft);
                                rightHand.joystick(joyRight);
                                break;
                            }
                    }
-               }*///mel
+               }
 
 
     private float getTrigger(SteamVR_TrackedObject controller)
@@ -254,13 +255,13 @@ public class VRPlayer : NetworkBehaviour
         }
     }
 
-    private Vector2 getJoystick(Transform controller)//(SteamVR_TrackedObject controller) //mel
+    private Vector2 getJoystick(SteamVR_TrackedObject controller)//(SteamVR_TrackedObject controller) //mel
     {
         Debug.Log("in getJoystick");
-        if ((int)controller.GetComponent<SteamVR_TrackedObject>().index >= 0)
+       /* if ((int)controller.GetComponent<SteamVR_TrackedObject>().index >= 0)
             return SteamVR_Controller.Input((int)controller.GetComponent<SteamVR_TrackedObject>().index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
         else
-            return Vector2.zero;/*
+            return Vector2.zero;*/
 
         if (controller.index >= 0)
         {
@@ -269,7 +270,7 @@ public class VRPlayer : NetworkBehaviour
         else
         {
             return Vector2.zero;
-        }*///mel
+        }
     }
     private Vector3 getControllerVelocity(SteamVR_TrackedObject controller)
     {
