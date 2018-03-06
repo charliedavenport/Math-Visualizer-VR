@@ -17,7 +17,8 @@ public class VectorField : MonoBehaviour {
     private ParticleSystem.Particle[] vectors;
     private ParticleSystem ps;
 
-    private delegate Vector3 VectorFunc(Vector3 input);
+    public delegate Vector3 VectorFunc(Vector3 input);
+    public VectorFunc func;
 
     // identity function: f(x,y,z) = (x,y,z) 
     private static Vector3 identity(Vector3 input) {
@@ -39,7 +40,7 @@ public class VectorField : MonoBehaviour {
             pos.z / Mathf.Max(Mathf.Abs(z_max), Mathf.Abs(z_min)) * scale_factor);
     }
 
-    private void generate(VectorFunc func)
+    public void generate()
     {
         float x_val = x_min,
             z_val = z_min,
@@ -89,9 +90,9 @@ public class VectorField : MonoBehaviour {
 
         vectors = new ParticleSystem.Particle[n_vectors];
 
-        VectorFunc func = spiral_up;
+        func = spiral_up;
 
-        generate(func); // set particles
+        generate(); // set particles
 
     }//Awake()
 
