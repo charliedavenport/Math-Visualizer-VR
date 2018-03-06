@@ -232,14 +232,15 @@ public class VRPlayer : NetworkBehaviour
 
     private Vector2 getJoystick(SteamVR_TrackedObject controller) //mel
     {
-        Debug.Log("in getJoystick");
+        
        /* if ((int)controller.GetComponent<SteamVR_TrackedObject>().index >= 0)
             return SteamVR_Controller.Input((int)controller.GetComponent<SteamVR_TrackedObject>().index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
         else
             return Vector2.zero;*/
 
         if (controller.index >= 0)
-        {
+		{
+			Debug.Log("in getJoystick");
             return SteamVR_Controller.Input((int)controller.index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
         }
         else
@@ -270,6 +271,7 @@ public class VRPlayer : NetworkBehaviour
 
     public void fly(Vector2 leftJoystick, Vector2 rightJoystick)
     {
+		Debug.Log("in fly");
         float leftSpeed = Mathf.Clamp(leftJoystick.y, 0, 1);
         float rightSpeed = Mathf.Clamp(rightJoystick.y, 0, 1);
         Vector3 leftDirection = leftHand.transform.forward;

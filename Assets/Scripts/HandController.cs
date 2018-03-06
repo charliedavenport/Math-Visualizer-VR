@@ -8,6 +8,7 @@ public class HandController : MonoBehaviour
     public Vector3 controllerVelocity;
     public Vector3 controllerAngularVelocity;
 
+	Transform attachPoint;
     public Rigidbody intersected;
     public bool isTeleporting = false;
     public bool isTeleLocationValid = false;
@@ -24,6 +25,12 @@ public class HandController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+		/*
+		 attachPoint = (new GameObject()).transform;
+		 attachPoint.SetParent(this.transform);
+		 attachPoint.localPosition = Vector3.zero;
+		 attachPoint.localRotation = Quaternion.identity;
+		  */
 
     }
 
