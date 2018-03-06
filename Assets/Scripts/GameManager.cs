@@ -11,17 +11,8 @@ public class GameManager : MonoBehaviour
     public SteamVR_TrackedObject hmd2;
     public SteamVR_TrackedObject controllerLeft;
     public SteamVR_TrackedObject controllerRight;
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    
+    
     public void enableVR()
     {
 

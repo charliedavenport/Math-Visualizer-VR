@@ -284,11 +284,19 @@ public class VRPlayer : NetworkBehaviour
     }
     public void fly(Vector2 leftJoystick, Vector2 rightJoystick)
     {
+<<<<<<< HEAD
         float leftSpeed = Mathf.Clamp(leftJoystick.y, 0, 1);
         float rightSpeed = Mathf.Clamp(rightJoystick.y, 0, 1);
         Vector3 leftDirection = leftHand.transform.forward;
         Vector3 rightDirection = rightHand.transform.forward;
         Vector3 displacement = (leftDirection * leftSpeed + rightDirection * rightSpeed) * Time.deltaTime;
         this.transform.Translate(displacement, Space.World);
+=======
+        int index = (int)controller.GetComponent<SteamVR_TrackedObject>().index;
+        if (index >= 0)
+			return SteamVR_Controller.Input(index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
+		else
+			return Vector2.zero;
+>>>>>>> 1f49d7d5e5471c560cc11f7dcefaabe4f42085b6
     }
 }
