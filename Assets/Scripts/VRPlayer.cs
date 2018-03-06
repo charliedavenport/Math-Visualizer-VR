@@ -88,7 +88,7 @@ public class VRPlayer : NetworkBehaviour
 
 		} // LEFT HAND
         */
-    }
+	}
 
     //
     private void FixedUpdate()
@@ -168,7 +168,7 @@ public class VRPlayer : NetworkBehaviour
     /**
      *Syncs players 
      */
-    [Command]
+     [Command]
     void CmdSyncPlayer(Vector3 pos, Quaternion rot, Vector3 lhpos, Quaternion lhrot, Vector3 rhpos, Quaternion rhrot)
     {
         head.transform.position = pos;
@@ -199,9 +199,6 @@ public class VRPlayer : NetworkBehaviour
     {
         int indexLeft = (int)controllerLeft.index;
         int indexRight = (int)controllerRight.index;
-
-
-
 
         /*if (indexRight >= 0)
         {
@@ -248,30 +245,27 @@ public class VRPlayer : NetworkBehaviour
         if (controller.index >= 0)
         {
             return SteamVR_Controller.Input((int)controller.index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger).magnitude;
-        }
-        else
-        {
+        } else {
             return 0.0f;
         }
     }
 
     private Vector2 getJoystick(SteamVR_TrackedObject controller)
-    {
-        Debug.Log("in getJoystick");
-        /*if ((int)controller.GetComponent<SteamVR_TrackedObject>().index >= 0)
-            return SteamVR_Controller.Input((int)controller.GetComponent<SteamVR_TrackedObject>().index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
-        else
-            return Vector2.zero;*/
-
-        if (controller.index >= 0)
         {
-            return SteamVR_Controller.Input((int)controller.index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
+            Debug.Log("in getJoystick");
+            /*if ((int)controller.GetComponent<SteamVR_TrackedObject>().index >= 0)
+                return SteamVR_Controller.Input((int)controller.GetComponent<SteamVR_TrackedObject>().index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
+            else
+                return Vector2.zero;*/
+            
+                if (controller.index >= 0)
+                {
+                    return SteamVR_Controller.Input((int)controller.index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);             
+                }else
+                {
+                    return Vector2.zero;
+                }
         }
-        else
-        {
-            return Vector2.zero;
-        }
-    }
     private Vector3 getControllerVelocity(SteamVR_TrackedObject controller)
     {
         Vector3 controllerVelocity = controller.index >= 0 ? SteamVR_Controller.Input((int)controller.index).velocity : Vector3.zero;
@@ -315,5 +309,3 @@ public class VRPlayer : NetworkBehaviour
 			return Vector2.zero;
     }*/
 }
-
-
