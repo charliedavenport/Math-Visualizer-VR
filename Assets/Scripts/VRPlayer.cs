@@ -203,15 +203,8 @@ public class VRPlayer : NetworkBehaviour
  
 
 
-    /*if (indexRight >= 0)
-    {
-        if (SteamVR_Controller.Input(indexRight).GetPressDown(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad))
-        {
-            CmdSpawnCube();
-        }
-    }*/
 
-      leftHand.controllerVelocity = getControllerVelocity(controllerLeft);
+       leftHand.controllerVelocity = getControllerVelocity(controllerLeft);
        rightHand.controllerVelocity = getControllerVelocity(controllerRight);
        leftHand.controllerAngularVelocity = getControllerAngularVelocity(controllerLeft);
        rightHand.controllerAngularVelocity = getControllerAngularVelocity(controllerRight);
@@ -221,26 +214,8 @@ public class VRPlayer : NetworkBehaviour
 
        Vector2 joyLeft = getJoystick(controllerLeft);
        Vector2 joyRight = getJoystick(controllerRight);
-       Debug.Log(joyRight.x + ", " + joyRight.y);
-
-       //leftHand.squeeze(triggerLeft);
-       //rightHand.squeeze(triggerRight);
-
-       /*switch (locomotionMode)
-       { 
-           /*case LocomotionMode.FLYING:
-               {
-                   fly(joyLeft, joyRight);
-                   break;
-               }
-           case LocomotionMode.TELEPORT:
-                           {
-                               leftHand.joystick(joyLeft);
-                               rightHand.joystick(joyRight);
-                               break;
-                           }
-                   }*/
-}
+        fly(joyLeft, joyRight);
+    }
 
 
     private float getTrigger(SteamVR_TrackedObject controller)
@@ -255,7 +230,7 @@ public class VRPlayer : NetworkBehaviour
         }
     }
 
-    private Vector2 getJoystick(SteamVR_TrackedObject controller)//(SteamVR_TrackedObject controller) //mel
+    private Vector2 getJoystick(SteamVR_TrackedObject controller) //mel
     {
         Debug.Log("in getJoystick");
        /* if ((int)controller.GetComponent<SteamVR_TrackedObject>().index >= 0)
@@ -283,36 +258,24 @@ public class VRPlayer : NetworkBehaviour
         Vector3 angularVelocity = controller.index >= 0 ? SteamVR_Controller.Input((int)controller.index).angularVelocity : Vector3.zero;
         return SteamVR_Rig.localToWorldMatrix.MultiplyVector(angularVelocity.normalized) * angularVelocity.magnitude;
     }
+    public void teleport(Vector3 pos, Vector3 forward)
+    {
+        hmdBlinker.blink(.1f);
+        Vector3 facingDirection = new Vector3(head.forward.x, 0, head.forward.z);
+        float angleBetween = Vector3.SignedAngle(facingDirection, forward, Vector3.up);
+        this.transform.Rotate(Vector3.up, angleBetween, Space.World);
+        Vector3 offset = pos - feet.position;
+        this.transform.Translate(offset, Space.World);
+    }
 
-    /* public void teleport(Transform controller)//Vector3 pos, Vector3 forward)
-     {
-         //hmdBlinker.blink(.1f);
-         // Vector3 facingDirection = new Vector3(head.forward.x, 0, head.forward.z);
-         // float angleBetween = Vector3.SignedAngle(facingDirection, forward, Vector3.up);
-         //   this.transform.Rotate(Vector3.up, angleBetween, Space.World);
-         // Vector3 offset = pos - feet.position;
-         //  this.transform.Translate(offset, Space.World);
-
-         Vector3 offset = pos - feet.position;
-         SteamVR_Rig.Translate(offset, Space.World);
-         Vector3 facingDirection = new Vector3(head.forward.x, 0, head.forward.z);
-         float angleBetween = Vector3.SignedAngle(facingDirection, forward, Vector3.up);
-         SteamVR_Rig.Rotate(Vector3.up, angleBetween, Space.World);
-     }*/ //mel
-         /*public void fly(Vector2 leftJoystick, Vector2 rightJoystick)
-         {
-
-             float leftSpeed = Mathf.Clamp(leftJoystick.y, 0, 1);
-             float rightSpeed = Mathf.Clamp(rightJoystick.y, 0, 1);
-             Vector3 leftDirection = leftHand.transform.forward;
-             Vector3 rightDirection = rightHand.transform.forward;
-             Vector3 displacement = (leftDirection * leftSpeed + rightDirection * rightSpeed) * Time.deltaTime;
-             this.transform.Translate(displacement, Space.World);
-             int index = (int)controller.GetComponent<SteamVR_TrackedObject>().index;
-             if (index >= 0)
-                 return SteamVR_Controller.Input(index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
-             else
-                 return Vector2.zero;
-         }*/
+    public void fly(Vector2 leftJoystick, Vector2 rightJoystick)
+    {
+        float leftSpeed = Mathf.Clamp(leftJoystick.y, 0, 1);
+        float rightSpeed = Mathf.Clamp(rightJoystick.y, 0, 1);
+        Vector3 leftDirection = leftHand.transform.forward;
+        Vector3 rightDirection = rightHand.transform.forward;
+        Vector3 displacement = (leftDirection * leftSpeed + rightDirection * rightSpeed) * Time.deltaTime;
+        this.transform.Translate(displacement, Space.World);
+    }
 }
 
