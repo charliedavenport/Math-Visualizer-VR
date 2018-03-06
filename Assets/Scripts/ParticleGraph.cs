@@ -23,6 +23,8 @@ public class ParticleGraph : MonoBehaviour {
 
     public float spinRate;
 
+    public float start_size;
+
     private int n_particles_x, n_particles_z;
     private int n_particles;
 
@@ -121,7 +123,7 @@ public class ParticleGraph : MonoBehaviour {
         float z_val = z_min;
         float incr = 1f / resolution;
 
-        GraphFunc func = sin_xz;
+        GraphFunc func = cos_x_sin_z;
         //GraphFunc func_1 = sphere_bottom;
 
         int i = 0;
@@ -137,7 +139,7 @@ public class ParticleGraph : MonoBehaviour {
                 else particles[i].startColor =
                         Color.HSVToRGB((particles[i].position.y - y_min) / (y_max - y_min), 1, 1); //normalize [ymin, ymax] to [0,1]
                 //particles[i].startColor = new Color(particles[i].startColor.r, particles[i].startColor.g, particles[i].startColor.b, 0.5f);
-                particles[i].startSize = 0.05f;
+                particles[i].startSize = start_size;
                 x_val += incr;
                 i++;
             }

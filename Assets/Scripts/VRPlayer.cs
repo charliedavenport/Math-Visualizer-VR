@@ -184,8 +184,9 @@ public class VRPlayer : NetworkBehaviour
 
     private Vector2 getJoystick(Transform controller)
     {
-		if ((int)controller.GetComponent<SteamVR_TrackedObject>().index >= 0)
-			return SteamVR_Controller.Input((int)controller.GetComponent<SteamVR_TrackedObject>().index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
+        int index = (int)controller.GetComponent<SteamVR_TrackedObject>().index;
+        if (index >= 0)
+			return SteamVR_Controller.Input(index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
 		else
 			return Vector2.zero;
     }
