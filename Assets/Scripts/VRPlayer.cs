@@ -15,6 +15,8 @@ public class VRPlayer : NetworkBehaviour
     public HandController leftHand;
     public HandController rightHand;
 
+    public GameManager gm;
+
     public Transform SteamVR_Rig;
     //public Transform hmd;
     //public Transform leftController;
@@ -97,7 +99,7 @@ public class VRPlayer : NetworkBehaviour
             {
                 if (SteamVR_Rig == null)
                 {
-                    GameManager gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+                    //GameManager gm = GameObject.Find("GameManager").GetComponent<GameManager>();
                     SteamVR_Rig = gm.vrCameraRig.transform;
                     hmd2 = gm.hmd2;
                     controllerLeft = gm.controllerLeft;
@@ -216,6 +218,8 @@ public class VRPlayer : NetworkBehaviour
 
         Vector2 joyLeft = getJoystick(controllerLeft);
         Vector2 joyRight = getJoystick(controllerRight);
+        Debug.Log(joyRight.x + ", " + joyRight.y);
+
         //leftHand.squeeze(triggerLeft);
         //rightHand.squeeze(triggerRight);
 
@@ -248,6 +252,7 @@ public class VRPlayer : NetworkBehaviour
 
     private Vector2 getJoystick(SteamVR_TrackedObject controller)
         {
+            Debug.Log("in getJoystick");
             /*if ((int)controller.GetComponent<SteamVR_TrackedObject>().index >= 0)
                 return SteamVR_Controller.Input((int)controller.GetComponent<SteamVR_TrackedObject>().index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
             else
