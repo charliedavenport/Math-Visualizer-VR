@@ -53,7 +53,7 @@ public class HandController : MonoBehaviour
         float mag = direction.magnitude;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
         //angle = 0 means fully pushed up, 90/-270 means pushed to the left
-       // bool validLocation = false;
+        // bool validLocation = false;
         Vector3 hitPos = Vector3.zero;
         Vector3 hitDir = Vector3.forward;
         int currTelePoint = 0;
@@ -62,12 +62,12 @@ public class HandController : MonoBehaviour
         for (int i = 0; i < telePoints.Count; i++)
         {
             telePoints[i].SetActive(false);
-        } 
-      //  teleHitVisual.SetActive(false);
+        }
+        //  teleHitVisual.SetActive(false);
 
         if (isTeleporting)
         {
-           
+
             //calculate arc points/distance
             float distanceTraveled = 0.0f;
             Vector3 currentPos = teleporterBase.position;
@@ -83,14 +83,14 @@ public class HandController : MonoBehaviour
                     go.transform.SetParent(this.transform);
                     telePoints.Add(go);
                 } // add points to teleporter if it's not big enough
-                
+
                 Vector3 nextPos = currentPos + currentVel * deltaTime + .5f * teleporterArcGravity * deltaTime * deltaTime;
                 Vector3 nextVel = currentVel + teleporterArcGravity * deltaTime; // needed because acceleration
                 Vector3 between = nextPos - currentPos;
 
                 telePoints[currTelePoint].SetActive(true);
                 telePoints[currTelePoint].transform.position = currentPos;
-                telePoints[currTelePoint].transform.forward = between.normalized; 
+                telePoints[currTelePoint].transform.forward = between.normalized;
 
                 //draw ray
                 /*if(telePoints.Count <= currTelePoint){
