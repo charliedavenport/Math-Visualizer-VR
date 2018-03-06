@@ -6,6 +6,8 @@ public class HandController : MonoBehaviour
 {
     //asdf
     public VRPlayer player;
+    public Vector3 controllerVelocity;
+    public Vector3 controllerAngularVelocity;
 
     public Rigidbody intersected;
     public bool isTeleporting = false;

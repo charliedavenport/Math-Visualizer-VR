@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VR;
+using UnityEngine.Networking;
 
-public class VRPlayer : MonoBehaviour
+public class VRPlayer : NetworkBehaviour 
 {
     //public GameLogic gameLogic;
 
@@ -21,6 +23,10 @@ public class VRPlayer : MonoBehaviour
     public SteamVR_TrackedObject controllerLeft;
     public SteamVR_TrackedObject controllerRight;
 
+    public enum LocomotionMode { FLYING };
+    public LocomotionMode locomotionMode = LocomotionMode.FLYING;
+
+
     public Rigidbody leftHeldObj;
     public Rigidbody rightHeldObj;
 
@@ -28,6 +34,20 @@ public class VRPlayer : MonoBehaviour
     float saveMaxRight;
 
     // Use this for initialization
+
+    // Use this for initialization
+    [SyncVar]
+    Vector3 headPos;
+    [SyncVar]
+    Quaternion headRot;
+    [SyncVar]
+    Vector3 leftHandPos;
+    [SyncVar]
+    Quaternion leftHandRot;
+    [SyncVar]
+    Vector3 rightHandPos;
+    [SyncVar]
+    Quaternion rightHandRot;    
     void Start()
     {
        head.transform.position = new Vector3(0, 2, 0);
@@ -192,7 +212,7 @@ public class VRPlayer : MonoBehaviour
         }
     }*/
 
-      leftHand.controllerVelocity = getControllerVelocity(controllerLeft);
+        leftHand.controllerVelocity = getControllerVelocity(controllerLeft);
        rightHand.controllerVelocity = getControllerVelocity(controllerRight);
        leftHand.controllerAngularVelocity = getControllerAngularVelocity(controllerLeft);
        rightHand.controllerAngularVelocity = getControllerAngularVelocity(controllerRight);
@@ -205,21 +225,21 @@ public class VRPlayer : MonoBehaviour
        //leftHand.squeeze(triggerLeft);
        //rightHand.squeeze(triggerRight);
 
-       switch (locomotionMode)
+      /* switch (locomotionMode)
        { 
            /*case LocomotionMode.FLYING:
                {
                    fly(joyLeft, joyRight);
                    break;
                }*/
-           case LocomotionMode.TELEPORT:
+           /*case LocomotionMode.TELEPORT:
                            {
                                leftHand.joystick(joyLeft);
                                rightHand.joystick(joyRight);
                                break;
                            }
-                   }
-               }
+                   }*/
+     }
 
 
     private float getTrigger(SteamVR_TrackedObject controller)
