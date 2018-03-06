@@ -18,9 +18,9 @@ public class VRPlayer : NetworkBehaviour
     public GameManager gm;
 
     public Transform SteamVR_Rig;
-    //public Transform hmd;
-    //public Transform leftController;
-    //public Transform rightController;
+    public Transform hmd;
+    public Transform leftController;
+    public Transform rightController;
     public Transform feet;
     public SteamVR_TrackedObject hmd2;
     public SteamVR_TrackedObject controllerLeft;
