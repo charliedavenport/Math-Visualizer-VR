@@ -47,23 +47,24 @@ public class VRPlayer : NetworkBehaviour
     Quaternion rightHandRot;
     void Start()
     {
-        head.transform.position = new Vector3(0, 2, 0);
+      //  head.transform.position = new Vector3(0, 2, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //int leftIndex = (int)leftController.GetComponent<SteamVR_TrackedObject>().index;
-        //int rightIndex = (int)rightController.GetComponent<SteamVR_TrackedObject>().index;
-        int leftIndex = (int)controllerLeft.index;
-        int rightIndex = (int)controllerRight.index;
+        int leftIndex = (int)leftController.GetComponent<SteamVR_TrackedObject>().index;
+        int rightIndex = (int)rightController.GetComponent<SteamVR_TrackedObject>().index;
+       // int leftIndex = (int)controllerLeft.index;
+        //int rightIndex = (int)controllerRight.index;
 
         // RIGHT HAND
         if (rightIndex >= 0)
         {
 
 
-            Vector2 joyRight = getJoystick(controllerRight.transform);//rightController);
+            // Vector2 joyRight = getJoystick(controllerRight.transform);//rightController);
+            Vector2 joyRight = getJoystick(rightController);
             rightHand.joystick(joyRight);
 
             float rightTrigger = SteamVR_Controller.Input(rightIndex).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger).magnitude;
@@ -77,7 +78,8 @@ public class VRPlayer : NetworkBehaviour
         // LEFT HAND
         if (leftIndex >= 0)
         {
-            Vector2 joyLeft = getJoystick(controllerLeft.transform);//leftController);
+            // Vector2 joyLeft = getJoystick(controllerLeft.transform);//leftController);
+            Vector2 joyLeft = getJoystick(leftController);
             leftHand.joystick(joyLeft);
 
             float leftTrigger = SteamVR_Controller.Input(leftIndex).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger).magnitude;
@@ -252,7 +254,7 @@ public class VRPlayer : NetworkBehaviour
         }
     }
 
-    private Vector2 getJoystick(SteamVR_TrackedObject controller)
+    private Vector2 getJoystick(Transform controller)//(SteamVR_TrackedObject controller) //mel
     {
         Debug.Log("in getJoystick");
         if ((int)controller.GetComponent<SteamVR_TrackedObject>().index >= 0)
