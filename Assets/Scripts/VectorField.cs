@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(ParticleSystem))]
+[RequireComponent(typeof(ParticleSystem), typeof(LineRenderer))]
 public class VectorField : MonoBehaviour {
 
 
@@ -16,6 +16,7 @@ public class VectorField : MonoBehaviour {
 
     private ParticleSystem.Particle[] vectors;
     private ParticleSystem ps;
+    private LineRenderer lr;
 
     public delegate Vector3 VectorFunc(Vector3 input);
     public VectorFunc func;
@@ -25,12 +26,26 @@ public class VectorField : MonoBehaviour {
         return input;
     }
 
-    private static Vector3 spiral_up(Vector3 input)
+    private static Vector3 sprial_up(Vector3 input)
     {
         return new Vector3(
-            Mathf.Cos(input.x),
+            -input.z,
             0.5f,
-            Mathf.Sin(input.z));
+            input.x);
+    }
+
+    private static Vector3 hyperbolic(Vector3 input) {
+        return new Vector3(
+            input.y * input.z,
+            input.x * input.z,
+            input.y * input.x);
+    }
+
+    private static Vector3 fluid_flow(Vector3 input) {
+        return new Vector3(
+            Mathf.Sin(input.x) + Mathf.Sin(input.y) + Mathf.Sin(input.z),
+            Mathf.Sin(input.x) - Mathf.Sin(input.y) + Mathf.Sin(input.z),
+            Mathf.Sin(input.x) + Mathf.Sin(input.y) - Mathf.Sin(input.z));
     }
 
     private Vector3 normalize_pos(Vector3 pos)
@@ -42,6 +57,9 @@ public class VectorField : MonoBehaviour {
 
     public void generate()
     {
+        float min_size = 0.05f,
+            max_size = 1f;
+
         float x_val = x_min,
             z_val = z_min,
             y_val = y_min;
@@ -62,9 +80,10 @@ public class VectorField : MonoBehaviour {
                     float phi = Mathf.Atan2(return_vec.y, Mathf.Sqrt(return_vec.x * return_vec.x + return_vec.z * return_vec.z)) * Mathf.Rad2Deg;
                     //Debug.Log("phi " + phi + ", theta " + theta);
                     vectors[i].rotation3D = new Vector3(-phi, theta, 0);
-                    float vec_size = start_size * Vector3.Magnitude(return_vec);
+                    float vec_size = Mathf.Clamp(start_size * Vector3.Magnitude(return_vec), min_size, max_size);
                     vectors[i].startSize3D = new Vector3(vec_size, vec_size, vec_size);
-                    vectors[i].startColor = Color.HSVToRGB(Vector3.Magnitude(return_vec) / (2f * y_max), 1, 1); // normalizing color values based on twice the y_max value
+                    float hue = Mathf.Clamp(Vector3.Magnitude(return_vec) / (2f * y_max), 0f, 1f);
+                    vectors[i].startColor = Color.HSVToRGB(hue, 1, 1); // normalizing color values based on twice the y_max value
                     z_val += incr;
                     i++;
                 }
@@ -80,6 +99,8 @@ public class VectorField : MonoBehaviour {
     private void Awake()
     {
         ps = GetComponent<ParticleSystem>();
+        lr = GetComponent<LineRenderer>();
+        //lr.positionCount = 20;
 
         n_vectors_x = (x_max - x_min) * resolution + 1;
         n_vectors_y = (y_max - y_min) * resolution + 1;
@@ -90,10 +111,32 @@ public class VectorField : MonoBehaviour {
 
         vectors = new ParticleSystem.Particle[n_vectors];
 
-        func = spiral_up;
+        func = hyperbolic;
 
         generate(); // set particles
-
+        StartCoroutine(draw_solution(new Vector3(1f, -1f, 0.8f)));
     }//Awake()
+
+    IEnumerator draw_solution(Vector3 start_pos) {
+        Vector3 pos = start_pos;
+        //Vector3[] positions = new Vector3[10];
+        for (int i=0; i<40; i++) {
+            //positions[i] = pos;
+            lr.positionCount = i + 1;
+            pos += 0.1f * func(pos);
+            //Debug.Log(pos);
+            lr.SetPosition(i, normalize_pos(pos));
+
+            //break out if out of bounds
+            if (pos.x >= x_max || pos.x <= x_min || pos.y >= y_max || pos.y <= y_min || pos.z >= z_max || pos.z <= z_min)
+                break;
+            yield return new WaitForSeconds(0.05f);
+        }
+
+    }
+
+    private void Start() {
+        //StartCoroutine(draw_solution(new Vector3(0.5f, 0f, 0f)));
+    }
 
 }
