@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GUIController : MonoBehaviour {
 
-	public Transform player;
+	//public Transform player;
 	public Text mode_text;
 	public Text rotate_text;
 	public Text func_text;

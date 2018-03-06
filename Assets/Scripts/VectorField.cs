@@ -104,10 +104,10 @@ public class VectorField : MonoBehaviour {
 
         vectors = new ParticleSystem.Particle[n_vectors];
 
-        func = hyperbolic;
+        func = sprial_up;
 
         generate(); // set particles
-        StartCoroutine(draw_solution(new Vector3(1f, -1f, 0.8f)));
+        //StartCoroutine(draw_solution(new Vector3(1f, -1f, 0.8f)));
     }//Awake()
 
     IEnumerator draw_solution(Vector3 start_pos) {
@@ -120,9 +120,11 @@ public class VectorField : MonoBehaviour {
             //Debug.Log(pos);
             lr.SetPosition(i, normalize_pos(pos));
 
-            //break out if out of bounds
-            if (pos.x >= x_max || pos.x <= x_min || pos.y >= y_max || pos.y <= y_min || pos.z >= z_max || pos.z <= z_min)
-                break;
+			//break out if out of bounds
+			if (pos.x >= x_max || pos.x <= x_min || pos.y >= y_max || pos.y <= y_min || pos.z >= z_max || pos.z <= z_min)
+			{
+				//break;
+			}
             yield return new WaitForSeconds(0.05f);
         }
 
