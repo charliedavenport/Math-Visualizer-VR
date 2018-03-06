@@ -28,7 +28,8 @@ public class ParticleGraph : MonoBehaviour {
     private int n_particles_x, n_particles_z;
     private int n_particles;
 
-    private delegate float GraphFunc(float x, float z);
+    public delegate float GraphFunc(float x, float z);
+    public GraphFunc func;
 
     static float sin_xz(float x, float z) {
         return Mathf.Sin(x * z);
@@ -119,15 +120,21 @@ public class ParticleGraph : MonoBehaviour {
 
         particles = new ParticleSystem.Particle[n_particles];
 
+        
+
+        func = cos_x_sin_z;
+        //GraphFunc func_1 = sphere_bottom;
+
+        generate();
+        
+    }//Awake()
+
+    public void generate() {
         float x_val = x_min;
         float z_val = z_min;
         float incr = 1f / resolution;
 
-        GraphFunc func = cos_x_sin_z;
-        //GraphFunc func_1 = sphere_bottom;
-
         int i = 0;
-
         for (int z = 0; z < n_particles_z; z++) {
             x_val = x_min;
             for (int x = 0; x < n_particles_x; x++) {
@@ -147,7 +154,7 @@ public class ParticleGraph : MonoBehaviour {
         }
 
         ps.SetParticles(particles, particles.Length);
-    }//Awake()
+    }
 
     private void Start() {
         //StartCoroutine(spin_particles());
