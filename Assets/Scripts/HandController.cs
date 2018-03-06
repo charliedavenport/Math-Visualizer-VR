@@ -8,6 +8,7 @@ public class HandController : MonoBehaviour
     public Vector3 controllerVelocity;
     public Vector3 controllerAngularVelocity;
 
+	Transform attachPoint;
     public Rigidbody intersected;
     public bool isTeleporting = false;
     public bool isTeleLocationValid = false;
@@ -24,6 +25,12 @@ public class HandController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+		/*
+		 attachPoint = (new GameObject()).transform;
+		 attachPoint.SetParent(this.transform);
+		 attachPoint.localPosition = Vector3.zero;
+		 attachPoint.localRotation = Quaternion.identity;
+		  */
 
     }
 
@@ -146,81 +153,86 @@ public class HandController : MonoBehaviour
 
     public void joystick(Vector2 direction)
     {
+
         float mag = direction.magnitude;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
         //angle = 0 means fully pushed up, 90/-270 means pushed to the left
-        Vector3 hitPos;
-        int currTelePoint = 0;
-        teleHitVisual.SetActive(true);
 
+        bool validLocation = false;
+        Vector3 hitPos = Vector3.zero;
+        Vector3 hitDir = Vector3.forward;
         for (int i = 0; i < telePoints.Count; i++)
         {
             telePoints[i].SetActive(false);
         }
-
+        teleHitVisual.SetActive(false);
         if (isTeleporting)
         {
-
-            //calculate arc points/distance
+            //compute arc points
             float distanceTraveled = 0.0f;
             Vector3 currentPos = teleporterBase.position;
             Vector3 currentVel = teleporterBase.forward * teleporterArcSpeed;
-            float deltaTime = teleporterArcSpeed / 500.0f;
 
+            int currentTeleporterPoint = 0;
+
+
+            float dt = teleporterArcSpeed / 1000.0f;
             while (distanceTraveled < maxDistance)
             {
+
+
+                Vector3 nextPos = currentPos + currentVel * dt + .5f * teleporterArcGravity * dt * dt;
+                Vector3 nextVel = currentVel + teleporterArcGravity * dt;
+                Vector3 between = nextPos - currentPos;
+
                 //draw ray
-                if (telePoints.Count <= currTelePoint)
+                if (telePoints.Count <= currentTeleporterPoint)
                 {
+                    //add  a point to the telporter
                     GameObject go = GameObject.Instantiate<GameObject>(telePrefab);
                     go.transform.SetParent(this.transform);
                     telePoints.Add(go);
-                } // add points to teleporter if it's not big enough
-                Vector3 nextPos = currentPos + currentVel * deltaTime + .5f * teleporterArcGravity * deltaTime * deltaTime;
-                Vector3 nextVel = currentVel + teleporterArcGravity * deltaTime; // needed because acceleration
-                Vector3 between = nextPos - currentPos;
 
-                telePoints[currTelePoint].SetActive(true);
-                telePoints[currTelePoint].transform.position = currentPos;
-                telePoints[currTelePoint].transform.forward = between.normalized;
+                }
+                telePoints[currentTeleporterPoint].SetActive(true);
+                telePoints[currentTeleporterPoint].transform.position = currentPos;
+                telePoints[currentTeleporterPoint].transform.forward = between.normalized;
 
-
-                //time to form our raycast
+                //perform raycast
 
                 RaycastHit hit;
                 if (Physics.Raycast(new Ray(currentPos, between.normalized), out hit, between.magnitude))
-                { // vector from current pos towards the next one will go as far as distance between
+                {
+                    validLocation = true;
                     hitPos = hit.point;
-                    isTeleLocationValid = true;
+                    hitDir = new Vector3(teleporterBase.forward.x, 0, teleporterBase.forward.z);
+                    hitDir = Quaternion.AngleAxis(-angle, Vector3.up) * hitDir;
                     teleHitVisual.SetActive(true);
                     teleHitVisual.transform.position = hitPos;
-                    teleHitVisual.transform.forward = new Vector3(teleporterBase.forward.x, 0, teleporterBase.forward.y);
-                    //orients hit visusalization 
-                    break; // break to not continue once something is hit
-                } //enters if something is hit with raycast
+                    teleHitVisual.transform.forward = hitDir;
+                    break;
+                }
 
-                currTelePoint++;
                 currentPos = nextPos;
                 currentVel = nextVel;
                 distanceTraveled += between.magnitude;
+                currentTeleporterPoint++;
             }
 
-        } // do the drawing and physics raycasting
+
+        }
 
 
-
-
-
-
-
-        if (mag > .1f && !isTeleporting)
+        if (mag > .9f && !isTeleporting)
         {
             isTeleporting = true;
         }
-        else if (mag < .05f && isTeleporting && isTeleLocationValid)
+        else if (mag < .85f && isTeleporting && validLocation)
         {
             isTeleporting = false;
+            player.teleport(hitPos, hitDir);
         }
+
 
     }
 
