@@ -121,10 +121,10 @@ public class HandController : MonoBehaviour
 
 
 
-        if (mag > .1f && !isTeleporting)  
+        if (mag > .9f && !isTeleporting)  
         {
             isTeleporting = true;
-        } else if (mag < .05f && isTeleporting && isTeleLocationValid)
+        } else if (mag < .85f && isTeleporting && isTeleLocationValid)
         {
             isTeleporting = false;
             player.teleport(hitPos, hitDir);
