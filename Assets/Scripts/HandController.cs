@@ -5,6 +5,8 @@ using UnityEngine;
 public class HandController : MonoBehaviour
 {
     public VRPlayer player;
+    public Vector3 controllerVelocity;
+    public Vector3 controllerAngularVelocity;
 
     public Rigidbody intersected;
     public bool isTeleporting = false;
