@@ -53,20 +53,17 @@ public class HandController : MonoBehaviour
         float mag = direction.magnitude;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
         //angle = 0 means fully pushed up, 90/-270 means pushed to the left
-<<<<<<< HEAD
-
-        bool validLocation = false;
-=======
->>>>>>> fe792bd24980a52571f0b274b611b9c3019e105f
+       // bool validLocation = false;
         Vector3 hitPos = Vector3.zero;
         Vector3 hitDir = Vector3.forward;
         int currTelePoint = 0;
+        teleHitVisual.SetActive(true);
 
         for (int i = 0; i < telePoints.Count; i++)
         {
             telePoints[i].SetActive(false);
         } 
-        teleHitVisual.SetActive(false);
+      //  teleHitVisual.SetActive(false);
 
         if (isTeleporting)
         {
@@ -107,28 +104,24 @@ public class HandController : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(new Ray(currentPos, between.normalized), out hit, between.magnitude))
                 { // vector from current pos towards the next one will go as far as distance between
-                    
-                    validLocation = true;
+
                     hitPos = hit.point;
-                    hitDir = new Vector3(teleporterBase.forward.x, 0, teleporterBase.forward.y);
+                    isTeleLocationValid = true;
                     teleHitVisual.SetActive(true);
                     teleHitVisual.transform.position = hitPos;
-<<<<<<< HEAD
-=======
                     hitDir = new Vector3(teleporterBase.forward.x, 0, teleporterBase.forward.z);
                     hitDir = Quaternion.AngleAxis(-angle, Vector3.up) * hitDir;
                     // rotates by hit directrion to allow angle of joystick to change facing direction
->>>>>>> fe792bd24980a52571f0b274b611b9c3019e105f
                     teleHitVisual.transform.forward = hitDir;
                     //orients hit visusalization 
                     break; // break to not continue once something is hit
                 } //enters if something is hit with raycast
 
 
+                currTelePoint++;
                 currentPos = nextPos;
                 currentVel = nextVel;
                 distanceTraveled += between.magnitude;
-                currTelePoint++;
 
             }
 
@@ -140,18 +133,16 @@ public class HandController : MonoBehaviour
 
 
 
-        if (mag > .9f && !isTeleporting)  
+        if (mag > .9f && !isTeleporting)
         {
             isTeleporting = true;
-<<<<<<< HEAD
-        } else if (mag < .05f && isTeleporting && validLocation)
-=======
-        } else if (mag < .85f && isTeleporting && isTeleLocationValid)
->>>>>>> fe792bd24980a52571f0b274b611b9c3019e105f
+        }
+        else if (mag < .85f && isTeleporting && isTeleLocationValid)
         {
             isTeleporting = false;
             player.teleport(hitPos, hitDir);
         }
+
 
     }
 
