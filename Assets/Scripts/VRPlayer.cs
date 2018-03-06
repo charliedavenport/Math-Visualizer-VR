@@ -260,7 +260,7 @@ public class VRPlayer : NetworkBehaviour
     }
     public void teleport(Vector3 pos, Vector3 forward)
     {
-        hmdBlinker.blink(.1f);
+       // hmdBlinker.blink(.1f);
         Vector3 facingDirection = new Vector3(head.forward.x, 0, head.forward.z);
         float angleBetween = Vector3.SignedAngle(facingDirection, forward, Vector3.up);
         this.transform.Rotate(Vector3.up, angleBetween, Space.World);
