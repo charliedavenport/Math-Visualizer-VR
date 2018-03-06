@@ -53,7 +53,8 @@ public class HandController : MonoBehaviour
         float mag = direction.magnitude;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
         //angle = 0 means fully pushed up, 90/-270 means pushed to the left
-        Vector3 hitPos;
+        Vector3 hitPos = Vector3.zero;
+        Vector3 hitDir = Vector3.forward;
         int currTelePoint = 0;
         teleHitVisual.SetActive(true);
 
@@ -98,7 +99,10 @@ public class HandController : MonoBehaviour
                     isTeleLocationValid = true;
                     teleHitVisual.SetActive(true);
                     teleHitVisual.transform.position = hitPos;
-                    teleHitVisual.transform.forward = new Vector3(teleporterBase.forward.x, 0, teleporterBase.forward.y);
+                    hitDir = new Vector3(teleporterBase.forward.x, 0, teleporterBase.forward.z);
+                    hitDir = Quaternion.AngleAxis(-angle, Vector3.up) * hitDir;
+                    // rotates by hit directrion to allow angle of joystick to change facing direction
+                    teleHitVisual.transform.forward = hitDir;
                     //orients hit visusalization 
                     break; // break to not continue once something is hit
                 } //enters if something is hit with raycast
@@ -123,6 +127,7 @@ public class HandController : MonoBehaviour
         } else if (mag < .05f && isTeleporting && isTeleLocationValid)
         {
             isTeleporting = false;
+            player.teleport(hitPos, hitDir);
         }
 
     }

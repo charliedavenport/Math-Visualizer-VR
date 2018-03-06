@@ -276,11 +276,17 @@ public class VRPlayer : NetworkBehaviour
     public void teleport(Vector3 pos, Vector3 forward)
     {
         //hmdBlinker.blink(.1f);
+        // Vector3 facingDirection = new Vector3(head.forward.x, 0, head.forward.z);
+        // float angleBetween = Vector3.SignedAngle(facingDirection, forward, Vector3.up);
+        //   this.transform.Rotate(Vector3.up, angleBetween, Space.World);
+        // Vector3 offset = pos - feet.position;
+        //  this.transform.Translate(offset, Space.World);
+
+        Vector3 offset = pos - feet.position;
+        SteamVR_Rig.Translate(offset, Space.World);
         Vector3 facingDirection = new Vector3(head.forward.x, 0, head.forward.z);
         float angleBetween = Vector3.SignedAngle(facingDirection, forward, Vector3.up);
-        this.transform.Rotate(Vector3.up, angleBetween, Space.World);
-        Vector3 offset = pos - feet.position;
-        this.transform.Translate(offset, Space.World);
+        SteamVR_Rig.Rotate(Vector3.up, angleBetween, Space.World);
     }
     /*public void fly(Vector2 leftJoystick, Vector2 rightJoystick)
     {
