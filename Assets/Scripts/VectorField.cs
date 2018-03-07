@@ -24,6 +24,7 @@ public class VectorField : MonoBehaviour {
     public VectorFunc current_func;
 	public List<VectorFunc> functions;
 	public List<string> function_names;
+    public List<string> function_descriptions;
 	public int current_func_index;
 
     // identity function: f(x,y,z) = (x,y,z) 
@@ -49,7 +50,7 @@ public class VectorField : MonoBehaviour {
         return new Vector3(
             Mathf.Sin(input.x) + Mathf.Sin(input.y) + Mathf.Sin(input.z),
             Mathf.Sin(input.x) - Mathf.Sin(input.y) + Mathf.Sin(input.z),
-            Mathf.Sin(input.x) + Mathf.Sin(input.y) - Mathf.Sin(input.z));
+            Mathf.Sin(input.x) + Mathf.Sin(input.y) - Mathf.Sin(input.z)) * 0.5f;
     }
 
     private Vector3 normalize_pos(Vector3 pos) {
@@ -79,7 +80,13 @@ public class VectorField : MonoBehaviour {
 			"identity",
 			"fluid_flow",
 		};
-		current_func_index = 0;
+        function_descriptions = new List<string> {
+            "<-y, x, 0.1>",
+            "<yz, xz, xy>",
+            "<x, y, z>",
+            "<sin(x) + sin(y) + sin(z),\nsin(x) - sin(y) + sin(z),\nsin(x) + sin(y) - sin(z)>"
+        };
+		current_func_index = 1;
 
 		start_pos_indicator.gameObject.SetActive(false);
 		start_pos = Vector3.zero;
