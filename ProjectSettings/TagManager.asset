@@ -6,6 +6,7 @@ TagManager:
   tags:
   - FxTemporaire
   - projectile
+  - rightController
   layers:
   - Default
   - TransparentFX

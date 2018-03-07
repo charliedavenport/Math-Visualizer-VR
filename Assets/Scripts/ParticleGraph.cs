@@ -38,7 +38,7 @@ public class ParticleGraph : MonoBehaviour {
         return Mathf.Sin(x * z);
     }
     static float xz(float x, float z) {
-        return x * z;
+        return x * z / 3f;
     }
     static float cos_x_sin_z(float x, float z) {
         return Mathf.Cos(x) * Mathf.Sin(z);

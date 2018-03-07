@@ -18,6 +18,7 @@ public class VectorField : MonoBehaviour {
     private ParticleSystem ps;
     private LineRenderer lr;
 	public Transform start_pos_indicator; //red sphere
+	public Vector3 start_pos;
 
     public delegate Vector3 VectorFunc(Vector3 input);
     public VectorFunc current_func;
@@ -81,6 +82,7 @@ public class VectorField : MonoBehaviour {
 		current_func_index = 0;
 
 		start_pos_indicator.gameObject.SetActive(false);
+		start_pos = Vector3.zero;
 
         n_vectors_x = (x_max - x_min) * resolution + 1;
         n_vectors_y = (y_max - y_min) * resolution + 1;
@@ -94,7 +96,7 @@ public class VectorField : MonoBehaviour {
 		current_func = functions[current_func_index];
 
         generate(); // set particles
-        StartCoroutine(draw_solution(new Vector3(1f, -1f, 0.8f)));
+        //StartCoroutine(draw_solution(new Vector3(1f, -1f, 0.8f)));
     }//Awake()
 	
 
@@ -167,11 +169,12 @@ public class VectorField : MonoBehaviour {
 		lr.positionCount = 0;
 	}
 
-    IEnumerator draw_solution(Vector3 start_pos) {
+    IEnumerator draw_solution(Vector3 start) {
+		start_pos = start;
 		start_pos_indicator.gameObject.SetActive(true);
-		start_pos_indicator.localPosition = normalize_pos(start_pos);
+		start_pos_indicator.localPosition = normalize_pos(start);
 		if (lr.positionCount > 0) resetSolutionCurve();
-        Vector3 pos = start_pos;
+        Vector3 pos = start;
         //Vector3[] positions = new Vector3[10];
         for (int i = 0; i < 40; i++) {
             //positions[i] = pos;
