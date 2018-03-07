@@ -8,10 +8,13 @@ public class InteractionZone : MonoBehaviour {
 	public Transform rightController;
 	public Transform start_pos_indicator;
 	public GraphManager mainGraph;
+	public VRPlayer player;
+
+	private bool set;
 
 	// Use this for initialization
 	void Start () {
-		
+		set = false;
 	}
 	
 	// Update is called once per frame
@@ -21,6 +24,7 @@ public class InteractionZone : MonoBehaviour {
 
 	private void OnTriggerEnter(Collider other)
 	{
+		set = false;
 		//Debug.Log("InteractionZone: OnTriggerEnter()");
 		if (other.gameObject.tag == "rightController" && mainGraph.isVectorMode)
 		{
@@ -35,7 +39,15 @@ public class InteractionZone : MonoBehaviour {
 		if (other.gameObject.tag == "rightController" && mainGraph.isVectorMode)
 		{
 			// lerp sphere to controller location
-			start_pos_indicator.position = Vector3.Lerp(start_pos_indicator.position, other.transform.position, 0.5f);
+			if (!set)
+			{
+				start_pos_indicator.position = Vector3.Lerp(start_pos_indicator.position, other.transform.position, 0.5f);
+				if (player.triggerRight > 0.8f)
+				{
+					set = true;
+					mainGraph.vectorField.new_solution_curve(start_pos_indicator.localPosition);
+				}
+			}
 		}
 	}
 

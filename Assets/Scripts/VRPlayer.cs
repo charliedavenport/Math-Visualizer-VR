@@ -27,6 +27,8 @@ public class VRPlayer : NetworkBehaviour
     public SteamVR_TrackedObject controllerLeft;
     public SteamVR_TrackedObject controllerRight;
 
+	public float triggerRight;
+
     //public enum LocomotionMode { TELEPORT };
     //public LocomotionMode locomotionMode = LocomotionMode.TELEPORT;
 
@@ -209,7 +211,7 @@ public class VRPlayer : NetworkBehaviour
 		rightHand.controllerAngularVelocity = getControllerAngularVelocity(controllerRight);
 
 		float triggerLeft = getTrigger(controllerLeft);
-		float triggerRight = getTrigger(controllerRight);
+		triggerRight = getTrigger(controllerRight); // made public for InteractionZone.cs
 
 		Vector2 joyLeft = getJoystick(controllerLeft);
 		gui.handleInput(joyLeft);
@@ -240,7 +242,7 @@ public class VRPlayer : NetworkBehaviour
 
         if (controller.index >= 0)
 		{
-			Debug.Log("in getJoystick");
+			//Debug.Log("in getJoystick");
             return SteamVR_Controller.Input((int)controller.index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad);
         }
         else

@@ -164,6 +164,11 @@ public class VectorField : MonoBehaviour {
 		return function_names[current_func_index];
 	}
 
+	public void new_solution_curve(Vector3 start)
+	{
+		StartCoroutine(draw_solution(start));
+	}
+
 	public void resetSolutionCurve()
 	{
 		lr.positionCount = 0;
