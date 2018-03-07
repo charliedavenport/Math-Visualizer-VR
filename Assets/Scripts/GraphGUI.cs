@@ -27,7 +27,7 @@ public class GraphGUI : MonoBehaviour {
         }
         else {
             functionSig.text = "f(x, y) = ";
-            functionDesc.text = "something";
+            functionDesc.text = mainGraph.particleGraph.function_descriptions[mainGraph.particleGraph.current_func_index];
         }
 
 	}

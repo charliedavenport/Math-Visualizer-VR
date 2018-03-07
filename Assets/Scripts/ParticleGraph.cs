@@ -32,6 +32,7 @@ public class ParticleGraph : MonoBehaviour {
     public GraphFunc current_func;
 	public List<GraphFunc> functions;
 	public List<string> function_names;
+    public List<string> function_descriptions;
 	public int current_func_index;
 
 	static float sin_xz(float x, float z) {
@@ -132,6 +133,14 @@ public class ParticleGraph : MonoBehaviour {
 			"sphere_top",
 			"sphere_bottom"
 		};
+        function_descriptions = new List<string> {
+            "sin(xy)",
+            "xy",
+            "cos(x) + sin(y)",
+            "exp(1 - x^2 - y^2)",
+            "+sqrt(9 - x^2 - y^2)",
+            "-sqrt(9 - x^2 - y^2)"
+        };
 
         n_particles_x = (x_max - x_min) * resolution;
         n_particles_z = (z_max - z_min) * resolution;

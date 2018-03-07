@@ -86,7 +86,7 @@ public class VectorField : MonoBehaviour {
             "<x, y, z>",
             "<sin(x) + sin(y) + sin(z),\nsin(x) - sin(y) + sin(z),\nsin(x) + sin(y) - sin(z)>"
         };
-		current_func_index = 1;
+		current_func_index = 0;
 
 		start_pos_indicator.gameObject.SetActive(false);
 		start_pos = Vector3.zero;
