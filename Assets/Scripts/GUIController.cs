@@ -42,7 +42,12 @@ public class GUIController : MonoBehaviour {
 
 		current_func = mainGraph.getCurrentFunctionName();
 		current_func_index = mainGraph.getCurrentFunctionIndex();
-	}
+
+        mode_select.gameObject.SetActive(true);
+        rotate_select.gameObject.SetActive(false);
+        scale_select.gameObject.SetActive(false);
+        function_select.gameObject.SetActive(false);
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -123,28 +128,37 @@ public class GUIController : MonoBehaviour {
     }
 
     public void moveSelectionDown() {
-        if (selection < 2) selection++;
+        if (selection < 3) selection++;
         updateSelection();
     }
 
     private void updateSelection() {
 		//Debug.Log(selection);
         switch (selection) {
-            case 0:
+            case 0: // MODE
 				mode_select.gameObject.SetActive(true);
 				rotate_select.gameObject.SetActive(false);
+                scale_select.gameObject.SetActive(false);
 				function_select.gameObject.SetActive(false);
 				break;
-            case 1:
-				mode_select.gameObject.SetActive(false);
-				rotate_select.gameObject.SetActive(true);
-				function_select.gameObject.SetActive(false);
-				break;
-            case 2:
-				mode_select.gameObject.SetActive(false);
-				rotate_select.gameObject.SetActive(false);
-				function_select.gameObject.SetActive(true);
-				break;
+            case 1: // ROTATE
+                mode_select.gameObject.SetActive(false);
+                rotate_select.gameObject.SetActive(true);
+                scale_select.gameObject.SetActive(false);
+                function_select.gameObject.SetActive(false);
+                break;
+            case 2: // SCALE
+                mode_select.gameObject.SetActive(false);
+                rotate_select.gameObject.SetActive(false);
+                scale_select.gameObject.SetActive(true);
+                function_select.gameObject.SetActive(false);
+                break;
+            case 3: // FUNCTION
+                mode_select.gameObject.SetActive(false);
+                rotate_select.gameObject.SetActive(false);
+                scale_select.gameObject.SetActive(false);
+                function_select.gameObject.SetActive(true);
+                break;
         }
     }
 }

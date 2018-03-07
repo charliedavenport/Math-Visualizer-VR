@@ -60,6 +60,10 @@ public class GraphManager : MonoBehaviour {
 
     public void scaleGraph(float scaleRate) {
         transform.localScale += new Vector3(scaleRate, scaleRate, scaleRate);
+        //vectorField.transform.localScale = this.transform.localScale;
+        //particleGraph.transform.localScale = this.transform.localScale;
+        vectorField.scale_factor += scaleRate * 0.5f;
+        particleGraph.graph_scale_factor += scaleRate * 0.5f;
         if (isVectorMode)
             vectorField.generate();
         else
