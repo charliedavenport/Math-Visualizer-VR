@@ -22,7 +22,8 @@ public class VectorField : MonoBehaviour {
     public delegate Vector3 VectorFunc(Vector3 input);
     public VectorFunc current_func;
 	public List<VectorFunc> functions;
-	private int current_func_index;
+	public List<string> function_names;
+	public int current_func_index;
 
     // identity function: f(x,y,z) = (x,y,z) 
     private static Vector3 identity(Vector3 input) {
@@ -69,6 +70,13 @@ public class VectorField : MonoBehaviour {
 			hyperbolic,
 			identity,
 			fluid_flow,
+		};
+		function_names = new List<string>
+		{
+			"spiral_up",
+			"hyperbolic",
+			"identity",
+			"fluid_flow",
 		};
 		current_func_index = 0;
 
@@ -127,6 +135,32 @@ public class VectorField : MonoBehaviour {
 
         ps.SetParticles(vectors, vectors.Length);
     }//generate
+
+	public string nextFunction()
+	{
+		resetSolutionCurve();
+		current_func_index++;
+		if (current_func_index >= functions.Count)
+		{
+			current_func_index = 0;
+		}
+		current_func = functions[current_func_index];
+		generate();
+		return function_names[current_func_index];
+	}
+
+	public string prevFunction()
+	{
+		resetSolutionCurve();
+		current_func_index--;
+		if (current_func_index < 0)
+		{
+			current_func_index = functions.Count - 1;
+		}
+		current_func = functions[current_func_index];
+		generate();
+		return function_names[current_func_index];
+	}
 
 	public void resetSolutionCurve()
 	{

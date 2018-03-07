@@ -64,6 +64,8 @@ MonoBehaviour:
   scale_factor: 0.5
   start_size: 0.25
   start_pos_indicator: {fileID: 0}
+  function_names: []
+  current_func_index: 0
 --- !u!120 &120268292847197314
 LineRenderer:
   m_ObjectHideFlags: 1

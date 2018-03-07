@@ -9,13 +9,17 @@ public class GUIController : MonoBehaviour {
 	public Text mode_text;
 	public Text rotate_text;
 	public Text func_text;
-    public Image select_img;
+	public Text func_index;
+	public Image function_select;
+    public Image mode_select;
+	public Image rotate_select;
 	public GraphManager mainGraph;
 
 	private RectTransform rect;
 
 	public bool isVectorMode; // true: vector field // false: particle graph
 	private string current_func;
+	private int current_func_index;
 	public float current_rot;
 
     private int selection; //between 0 and 2. 0 means 'Mode Text', 1 means 'Rotate Text', 2 means 'Function Text'
@@ -31,13 +35,17 @@ public class GUIController : MonoBehaviour {
 
         selection = 0; // start out with the mode text selected
         updateSelection();
+
+		current_func = mainGraph.getCurrentFunctionName();
+		current_func_index = mainGraph.getCurrentFunctionIndex();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		mode_text.text = "Mode: " + (isVectorMode? "Vector Field" : "3D Graph");
 		rotate_text.text = "Rotation: " + current_rot.ToString("F");
-		func_text.text = "Function: " + current_func;
+		func_text.text = "" + current_func;
+		func_index.text = "Function: " + current_func_index;
 	}
 
 	public void handleInput(Vector2 joyLeft)
@@ -67,6 +75,8 @@ public class GUIController : MonoBehaviour {
 					case 0: // Mode
 						isVectorMode = !isVectorMode;
 						mainGraph.setMode(isVectorMode);
+						current_func = mainGraph.getCurrentFunctionName();
+						current_func_index = mainGraph.getCurrentFunctionIndex();
 						break;
 					case 1: // Rotate
 						if (!mainGraph.isRotating)
@@ -79,7 +89,8 @@ public class GUIController : MonoBehaviour {
 						}
 						break;
 					case 2: // Function
-						//TODO
+						current_func = (x_speed > 0) ? mainGraph.nextFunction() : mainGraph.prevFunction();
+						current_func_index = mainGraph.getCurrentFunctionIndex();
 						break;
 					default: // ERROR
 						Debug.LogError("GUIController.handleInput: selection out of bounds");
@@ -109,14 +120,20 @@ public class GUIController : MonoBehaviour {
 		//Debug.Log(selection);
         switch (selection) {
             case 0:
-                select_img.rectTransform.position = mode_text.rectTransform.position;
-                break;
+				mode_select.gameObject.SetActive(true);
+				rotate_select.gameObject.SetActive(false);
+				function_select.gameObject.SetActive(false);
+				break;
             case 1:
-                select_img.rectTransform.position = rotate_text.rectTransform.position;
-                break;
+				mode_select.gameObject.SetActive(false);
+				rotate_select.gameObject.SetActive(true);
+				function_select.gameObject.SetActive(false);
+				break;
             case 2:
-                select_img.rectTransform.position = func_text.rectTransform.position;
-                break;
+				mode_select.gameObject.SetActive(false);
+				rotate_select.gameObject.SetActive(false);
+				function_select.gameObject.SetActive(true);
+				break;
         }
     }
 }

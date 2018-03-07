@@ -30,6 +30,7 @@ public class GraphManager : MonoBehaviour {
 	
 	// enable or disable grpahs
 	public void setMode(bool isVec) {
+		vectorField.start_pos_indicator.gameObject.SetActive(false);//reset whenever mode is changed
 		isVectorMode = isVec;
 		if (isVectorMode) {
 			particleGraph.gameObject.SetActive(false);
@@ -56,6 +57,30 @@ public class GraphManager : MonoBehaviour {
         //set rotation in gui
         //gui.current_rot = current_rot.y + theta;
     }
+
+	//chan
+	public string nextFunction()
+	{
+			return isVectorMode? vectorField.nextFunction() : particleGraph.nextFunction();
+	}
+
+	public string prevFunction()
+	{
+		return isVectorMode? vectorField.prevFunction() : particleGraph.prevFunction();
+	}
+
+	public string getCurrentFunctionName()
+	{
+		return isVectorMode ? 
+			vectorField.function_names[vectorField.current_func_index]
+			: particleGraph.function_names[particleGraph.current_func_index];
+
+	}
+
+	public int getCurrentFunctionIndex()
+	{
+		return isVectorMode ? vectorField.current_func_index : particleGraph.current_func_index;
+	}
 
 	IEnumerator lerp_rotation(Quaternion start_rot, Quaternion end_rot)
 	{

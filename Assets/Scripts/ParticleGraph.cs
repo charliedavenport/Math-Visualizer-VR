@@ -29,9 +29,12 @@ public class ParticleGraph : MonoBehaviour {
     private int n_particles;
 
     public delegate float GraphFunc(float x, float z);
-    public GraphFunc func;
+    public GraphFunc current_func;
+	public List<GraphFunc> functions;
+	public List<string> function_names;
+	public int current_func_index;
 
-    static float sin_xz(float x, float z) {
+	static float sin_xz(float x, float z) {
         return Mathf.Sin(x * z);
     }
     static float xz(float x, float z) {
@@ -43,11 +46,11 @@ public class ParticleGraph : MonoBehaviour {
     static float normal_distr(float x, float z) {
         return Mathf.Exp(1 - x*x - z*z) / Mathf.Exp(1);
     }
-    static float sphere_top(float x, float z) {
-        return Mathf.Sqrt(1 - x * x - z * z);
+    static float sphere_top(float x, float z) { 
+        return Mathf.Sqrt(9 - x * x - z * z) / 3f;
     }
     static float sphere_bottom(float x, float z) {
-        return -Mathf.Sqrt(4 - x * x - z * z);
+        return -Mathf.Sqrt(9 - x * x - z * z) / 3f;
     }
 
     private ParticleSystem.Particle[] rotate_particles(ParticleSystem.Particle[] part, float rate) {
@@ -111,6 +114,25 @@ public class ParticleGraph : MonoBehaviour {
     void Awake () {
         ps = GetComponent<ParticleSystem>();
 
+		functions = new List<GraphFunc>
+		{
+			sin_xz,
+			xz,
+			cos_x_sin_z,
+			normal_distr,
+			sphere_top,
+			sphere_bottom
+		};
+		function_names = new List<string>
+		{
+			"sin_xz",
+			"xz",
+			"cos_x_sin_z",
+			"normal_distr",
+			"sphere_top",
+			"sphere_bottom"
+		};
+
         n_particles_x = (x_max - x_min) * resolution;
         n_particles_z = (z_max - z_min) * resolution;
 
@@ -122,7 +144,7 @@ public class ParticleGraph : MonoBehaviour {
 
         
 
-        func = cos_x_sin_z;
+        current_func = cos_x_sin_z;
         //GraphFunc func_1 = sphere_bottom;
 
         generate();
@@ -138,7 +160,7 @@ public class ParticleGraph : MonoBehaviour {
         for (int z = 0; z < n_particles_z; z++) {
             x_val = x_min;
             for (int x = 0; x < n_particles_x; x++) {
-                particles[i].position = normalize_pos(new Vector3(x_val, func(x_val, z_val), z_val));
+                particles[i].position = normalize_pos(new Vector3(x_val, current_func(x_val, z_val), z_val));
 
                 if (particles[i].position.y < y_min || particles[i].position.y > y_max) {
                     particles[i].startColor = Color.clear; // particles outside of y-bounds are invisible
@@ -156,7 +178,31 @@ public class ParticleGraph : MonoBehaviour {
         ps.SetParticles(particles, particles.Length);
     }
 
-    private void Start() {
+	public string nextFunction()
+	{
+		current_func_index++;
+		if (current_func_index >= functions.Count)
+		{
+			current_func_index = 0;
+		}
+		current_func = functions[current_func_index];
+		generate();
+		return function_names[current_func_index];
+	}
+
+	public string prevFunction()
+	{
+		current_func_index--;
+		if (current_func_index < 0)
+		{
+			current_func_index = functions.Count - 1;
+		}
+		current_func = functions[current_func_index];
+		generate();
+		return function_names[current_func_index];
+	}
+
+	private void Start() {
         //StartCoroutine(spin_particles());
         //StartCoroutine(scale_particles());
     }
