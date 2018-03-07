@@ -107,7 +107,7 @@ public class VectorField : MonoBehaviour {
         func = sprial_up;
 
         generate(); // set particles
-        //StartCoroutine(draw_solution(new Vector3(1f, -1f, 0.8f)));
+        StartCoroutine(draw_solution(new Vector3(1f, -1f, 0.8f)));
     }//Awake()
 
     IEnumerator draw_solution(Vector3 start_pos) {
@@ -128,10 +128,6 @@ public class VectorField : MonoBehaviour {
             yield return new WaitForSeconds(0.05f);
         }
 
-    }
-
-    private void Start() {
-        //StartCoroutine(draw_solution(new Vector3(0.5f, 0f, 0f)));
     }
 
 }
