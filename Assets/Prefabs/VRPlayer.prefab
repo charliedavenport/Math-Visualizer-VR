@@ -348,8 +348,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1912785614476440}
-  m_LocalRotation: {x: 0.27503023, y: 0.42823485, z: -0.2539004, w: 0.822501}
-  m_LocalPosition: {x: 0.6912598, y: 0.5154928, z: 1.6557803}
+  m_LocalRotation: {x: 0.35981792, y: -0.04056391, z: -0.10949816, w: 0.92568666}
+  m_LocalPosition: {x: 1.2892396, y: 0.544008, z: 2.0140119}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4256729142235448}
@@ -462,8 +462,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1308026896958594}
-  m_LocalRotation: {x: 0.36874172, y: 0.08313947, z: 0.04359637, w: 0.9247793}
-  m_LocalPosition: {x: 1.5325958, y: 0.48785293, z: 1.4125891}
+  m_LocalRotation: {x: 0.37007928, y: 0.25283813, z: -0.016128073, w: 0.89378643}
+  m_LocalPosition: {x: 2.1844718, y: 0.5201163, z: 1.7678411}
   m_LocalScale: {x: 0.80128133, y: 1, z: 1}
   m_Children:
   - {fileID: 4880179183321514}
@@ -891,8 +891,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 114939268791342578}
-  controllerVelocity: {x: 0.012966228, y: -0.006415946, z: -0.0015205245}
-  controllerAngularVelocity: {x: -0.04243392, y: 0.00026543782, z: 0.32026556}
+  controllerVelocity: {x: 0.007981525, y: 0.001622666, z: -0.00014257425}
+  controllerAngularVelocity: {x: 0.027942086, y: 0.00066356343, z: 0.13341938}
   intersected: {fileID: 0}
   isTeleporting: 0
   isTeleLocationValid: 0
@@ -915,8 +915,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 114939268791342578}
-  controllerVelocity: {x: 0.025341492, y: -0.0037179135, z: 0.013579272}
-  controllerAngularVelocity: {x: 0.2845104, y: -0.0035602269, z: 0.10008565}
+  controllerVelocity: {x: -0.00013601089, y: 0.0012345249, z: 0.0039000774}
+  controllerAngularVelocity: {x: -0.03705846, y: 0.0048611136, z: -0.31097567}
   intersected: {fileID: 0}
   isTeleporting: 0
   isTeleLocationValid: 0
