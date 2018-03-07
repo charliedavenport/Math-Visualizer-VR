@@ -17,16 +17,19 @@ public class VectorField : MonoBehaviour {
     private ParticleSystem.Particle[] vectors;
     private ParticleSystem ps;
     private LineRenderer lr;
+	public Transform start_pos_indicator; //red sphere
 
     public delegate Vector3 VectorFunc(Vector3 input);
-    public VectorFunc func;
+    public VectorFunc current_func;
+	public List<VectorFunc> functions;
+	private int current_func_index;
 
     // identity function: f(x,y,z) = (x,y,z) 
     private static Vector3 identity(Vector3 input) {
         return input;
     }
 
-    private static Vector3 sprial_up(Vector3 input) {
+    private static Vector3 spiral_up(Vector3 input) {
         return new Vector3(
             -input.z,
             0.5f,
@@ -53,7 +56,42 @@ public class VectorField : MonoBehaviour {
             pos.z / Mathf.Max(Mathf.Abs(z_max), Mathf.Abs(z_min)) * scale_factor);
     }
 
-    public void generate() {
+    
+
+    private void Awake() {
+        ps = GetComponent<ParticleSystem>();
+        lr = GetComponent<LineRenderer>();
+		//lr.positionCount = 20;
+
+		functions = new List<VectorFunc>
+		{
+			spiral_up,
+			hyperbolic,
+			identity,
+			fluid_flow,
+		};
+		current_func_index = 0;
+
+		start_pos_indicator.gameObject.SetActive(false);
+
+        n_vectors_x = (x_max - x_min) * resolution + 1;
+        n_vectors_y = (y_max - y_min) * resolution + 1;
+        n_vectors_z = (z_max - z_min) * resolution + 1;
+        n_vectors = n_vectors_x * n_vectors_y * n_vectors_z;
+
+        Debug.Log("n_vectors: " + n_vectors);
+
+        vectors = new ParticleSystem.Particle[n_vectors];
+
+		current_func = functions[current_func_index];
+
+        generate(); // set particles
+        StartCoroutine(draw_solution(new Vector3(1f, -1f, 0.8f)));
+    }//Awake()
+	
+
+	public void generate() {
+
         float min_size = 0.05f,
             max_size = 1f;
 
@@ -69,7 +107,7 @@ public class VectorField : MonoBehaviour {
                 for (int z = 0; z < n_vectors_z; z++) {
                     Vector3 input_vec = new Vector3(x_val, y_val, z_val);
                     vectors[i].position = normalize_pos(input_vec);
-                    Vector3 return_vec = func(input_vec);
+                    Vector3 return_vec = current_func(input_vec);
                     float theta = Mathf.Atan2(return_vec.x, return_vec.z) * Mathf.Rad2Deg;
                     float phi = Mathf.Atan2(return_vec.y, Mathf.Sqrt(return_vec.x * return_vec.x + return_vec.z * return_vec.z)) * Mathf.Rad2Deg;
                     //Debug.Log("phi " + phi + ", theta " + theta);
@@ -88,37 +126,26 @@ public class VectorField : MonoBehaviour {
         }
 
         ps.SetParticles(vectors, vectors.Length);
-    }
+    }//generate
 
-    private void Awake() {
-        ps = GetComponent<ParticleSystem>();
-        lr = GetComponent<LineRenderer>();
-        //lr.positionCount = 20;
-
-        n_vectors_x = (x_max - x_min) * resolution + 1;
-        n_vectors_y = (y_max - y_min) * resolution + 1;
-        n_vectors_z = (z_max - z_min) * resolution + 1;
-        n_vectors = n_vectors_x * n_vectors_y * n_vectors_z;
-
-        Debug.Log("n_vectors: " + n_vectors);
-
-        vectors = new ParticleSystem.Particle[n_vectors];
-
-        func = sprial_up;
-
-        generate(); // set particles
-        StartCoroutine(draw_solution(new Vector3(1f, -1f, 0.8f)));
-    }//Awake()
+	public void resetSolutionCurve()
+	{
+		lr.positionCount = 0;
+	}
 
     IEnumerator draw_solution(Vector3 start_pos) {
+		start_pos_indicator.gameObject.SetActive(true);
+		start_pos_indicator.localPosition = normalize_pos(start_pos);
+		if (lr.positionCount > 0) resetSolutionCurve();
         Vector3 pos = start_pos;
         //Vector3[] positions = new Vector3[10];
         for (int i = 0; i < 40; i++) {
             //positions[i] = pos;
             lr.positionCount = i + 1;
-            pos += 0.1f * func(pos);
+            
             //Debug.Log(pos);
             lr.SetPosition(i, normalize_pos(pos));
+			pos += 0.1f * current_func(pos);
 
 			//break out if out of bounds
 			if (pos.x >= x_max || pos.x <= x_min || pos.y >= y_max || pos.y <= y_min || pos.z >= z_max || pos.z <= z_min)

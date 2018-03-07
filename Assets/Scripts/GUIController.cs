@@ -10,6 +10,7 @@ public class GUIController : MonoBehaviour {
 	public Text rotate_text;
 	public Text func_text;
     public Image select_img;
+	public GraphManager mainGraph;
 
 	private RectTransform rect;
 
@@ -18,13 +19,15 @@ public class GUIController : MonoBehaviour {
 	public float current_rot;
 
     private int selection; //between 0 and 2. 0 means 'Mode Text', 1 means 'Rotate Text', 2 means 'Function Text'
-
+	private bool wait_for_reset; //used in handling controller input
 	// Use this for initialization
 	void Start () {
 		//isVectorMode = false; // set by GraphManager.cs
 		rect = GetComponent<RectTransform>();
 		rect.rotation = Quaternion.Euler(45f, 0f, 0f);
 		rect.Translate(0f, 0f, 0.15f); // 'recenter' GUI with controller
+
+		wait_for_reset = false;
 
         selection = 0; // start out with the mode text selected
         updateSelection();
@@ -35,6 +38,61 @@ public class GUIController : MonoBehaviour {
 		mode_text.text = "Mode: " + (isVectorMode? "Vector Field" : "3D Graph");
 		rotate_text.text = "Rotation: " + current_rot.ToString("F");
 		func_text.text = "Function: " + current_func;
+	}
+
+	public void handleInput(Vector2 joyLeft)
+	{
+		float y_speed = Mathf.Clamp(joyLeft.y, -1, 1);
+		float x_speed = Mathf.Clamp(joyLeft.x, -1, 1);
+
+		if (!wait_for_reset)
+		{
+			// move select up/down before changing selected value 
+			//(important to note for when the user pushes the stick diagonally)
+			if (y_speed >= 0.8f)
+			{
+				moveSelectionUp();
+				wait_for_reset = true;
+			}
+			else if (y_speed <= -0.8f)
+			{
+				moveSelectionDown();
+				wait_for_reset = true;
+			}
+			else if (Mathf.Abs(x_speed) >= 0.8f)
+			{
+				wait_for_reset = true;
+				switch (selection)
+				{
+					case 0: // Mode
+						isVectorMode = !isVectorMode;
+						mainGraph.setMode(isVectorMode);
+						break;
+					case 1: // Rotate
+						if (!mainGraph.isRotating)
+						{
+							bool pos = (x_speed > 0);
+							mainGraph.rotateGraph(pos ? 30 : -30);
+							current_rot += (pos ? 30 : -30);
+							if (current_rot >= 360f) current_rot -= 360f;
+							else if (current_rot <= -360f) current_rot += 360f;
+						}
+						break;
+					case 2: // Function
+						//TODO
+						break;
+					default: // ERROR
+						Debug.LogError("GUIController.handleInput: selection out of bounds");
+						break;
+						
+				}
+			}
+
+		}
+		else if (Mathf.Abs(y_speed) < 0.75f && Mathf.Abs(x_speed) < 0.75f)
+		{
+			wait_for_reset = false;
+		}
 	}
 
     public void moveSelectionUp() {
@@ -48,6 +106,7 @@ public class GUIController : MonoBehaviour {
     }
 
     private void updateSelection() {
+		//Debug.Log(selection);
         switch (selection) {
             case 0:
                 select_img.rectTransform.position = mode_text.rectTransform.position;

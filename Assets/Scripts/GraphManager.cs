@@ -9,8 +9,12 @@ public class GraphManager : MonoBehaviour {
 	public VectorField vectorField;
     public GUIController gui;
 
+	public bool isRotating;
+
 	// Use this for initialization
 	void Start () {
+		isRotating = false;
+
 		if (isVectorMode) {
 			particleGraph.gameObject.SetActive(false);
 			vectorField.gameObject.SetActive(true);
@@ -25,33 +29,53 @@ public class GraphManager : MonoBehaviour {
 	}
 	
 	// enable or disable grpahs
-	void setMode(bool isVec) {
+	public void setMode(bool isVec) {
 		isVectorMode = isVec;
 		if (isVectorMode) {
 			particleGraph.gameObject.SetActive(false);
 			vectorField.gameObject.SetActive(true);
+			vectorField.generate();
 		}
 		else {
 			particleGraph.gameObject.SetActive(true);
 			vectorField.gameObject.SetActive(false);
+			particleGraph.generate();
 		}
-
-	}
-
-	// Update is called once per frame
-	void Update () {
 		
 	}
 
     // theta is in degrees
     public void rotateGraph(float theta) {
         Vector3 current_rot = transform.rotation.eulerAngles;
-        transform.rotation = Quaternion.Euler(current_rot.x, current_rot.y + theta, current_rot.z);
-        if (isVectorMode) vectorField.generate();
-        else particleGraph.generate();
+        Quaternion end_rot = Quaternion.Euler(current_rot.x, current_rot.y + theta, current_rot.z);
+		if (!isRotating)
+		{
+			StartCoroutine(lerp_rotation(transform.rotation, end_rot));
+		}
 
         //set rotation in gui
-        gui.current_rot = current_rot.y + theta;
+        //gui.current_rot = current_rot.y + theta;
     }
+
+	IEnumerator lerp_rotation(Quaternion start_rot, Quaternion end_rot)
+	{
+		isRotating = true;
+		float total_time = .25f;
+		int n_iter = 10;
+		float incr = total_time / (float)n_iter;
+		for (float t = 0f; t <= total_time ; t += incr)
+		{
+			transform.rotation = Quaternion.Lerp(start_rot, end_rot, t / total_time);
+			if (isVectorMode)
+				vectorField.generate();
+			else
+				particleGraph.generate();
+			yield return new WaitForSeconds(incr);
+			//yield return null;
+		}
+		isRotating = false;
+			
+		
+	}
 
 }

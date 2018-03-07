@@ -16,6 +16,7 @@ public class VRPlayer : NetworkBehaviour
     public HandController rightHand;
 
     public GameManager gm;
+	public GUIController gui; // pass controller input into this
 
     public Transform SteamVR_Rig;
     //public Transform hmd;
@@ -195,30 +196,29 @@ public class VRPlayer : NetworkBehaviour
          newT.rotation = origT.rotation;
      }
 
-     private void handleControllerInputs()
-     {
-         int indexLeft = (int)controllerLeft.index;
-         int indexRight = (int)controllerRight.index;
-
- 
+	private void handleControllerInputs()
+	{
+		int indexLeft = (int)controllerLeft.index;
+		int indexRight = (int)controllerRight.index;
 
 
 
-       leftHand.controllerVelocity = getControllerVelocity(controllerLeft);
-       rightHand.controllerVelocity = getControllerVelocity(controllerRight);
-       leftHand.controllerAngularVelocity = getControllerAngularVelocity(controllerLeft);
-       rightHand.controllerAngularVelocity = getControllerAngularVelocity(controllerRight);
+		leftHand.controllerVelocity = getControllerVelocity(controllerLeft);
+		rightHand.controllerVelocity = getControllerVelocity(controllerRight);
+		leftHand.controllerAngularVelocity = getControllerAngularVelocity(controllerLeft);
+		rightHand.controllerAngularVelocity = getControllerAngularVelocity(controllerRight);
 
-       float triggerLeft = getTrigger(controllerLeft);
-       float triggerRight = getTrigger(controllerRight);
+		float triggerLeft = getTrigger(controllerLeft);
+		float triggerRight = getTrigger(controllerRight);
 
-       Vector2 joyLeft = getJoystick(controllerLeft);
-       Vector2 joyRight = getJoystick(controllerRight);
-        fly(joyLeft, joyRight);
-    }
+		Vector2 joyLeft = getJoystick(controllerLeft);
+		gui.handleInput(joyLeft);
+		Vector2 joyRight = getJoystick(controllerRight);
+		fly(Vector2.zero, joyRight); // joyLeft no longer used for flying (Charlie)
+	}
 
 
-    private float getTrigger(SteamVR_TrackedObject controller)
+	private float getTrigger(SteamVR_TrackedObject controller)
     {
         if (controller.index >= 0)
         {
