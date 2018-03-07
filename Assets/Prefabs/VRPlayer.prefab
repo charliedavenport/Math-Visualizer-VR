@@ -348,8 +348,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1912785614476440}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.0129}
+  m_LocalRotation: {x: -0.78323644, y: -0.29735994, z: 0.20489039, w: 0.5061004}
+  m_LocalPosition: {x: 0.40793362, y: 1.4568586, z: 0.2853834}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4256729142235448}
@@ -462,8 +462,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1308026896958594}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.32919, y: 0, z: 0}
+  m_LocalRotation: {x: -0.8529804, y: 0.062932484, z: 0.091481864, w: 0.50999516}
+  m_LocalPosition: {x: 0.685879, y: 1.5457213, z: 0.25747097}
   m_LocalScale: {x: 0.80128133, y: 1, z: 1}
   m_Children:
   - {fileID: 4880179183321514}
@@ -891,8 +891,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 114939268791342578}
-  controllerVelocity: {x: 0, y: 0, z: 0}
-  controllerAngularVelocity: {x: 0, y: 0, z: 0}
+  controllerVelocity: {x: -0.27282447, y: -0.72759384, z: 0.33672208}
+  controllerAngularVelocity: {x: 0.70711917, y: 0.55213416, z: 0.35708386}
   intersected: {fileID: 0}
   isTeleporting: 0
   isTeleLocationValid: 0
@@ -915,8 +915,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 114939268791342578}
-  controllerVelocity: {x: 0, y: 0, z: 0}
-  controllerAngularVelocity: {x: 0, y: 0, z: 0}
+  controllerVelocity: {x: -0.16543783, y: -0.8071831, z: 0.2024911}
+  controllerAngularVelocity: {x: 1.2641673, y: -1.6511836, z: -0.81910425}
   intersected: {fileID: 0}
   isTeleporting: 0
   isTeleLocationValid: 0
@@ -943,14 +943,10 @@ MonoBehaviour:
   rightHand: {fileID: 114335530043907276}
   gm: {fileID: 0}
   SteamVR_Rig: {fileID: 0}
-  hmd: {fileID: 0}
-  leftController: {fileID: 0}
-  rightController: {fileID: 0}
   feet: {fileID: 4721018033741974}
   hmd2: {fileID: 0}
   controllerLeft: {fileID: 0}
   controllerRight: {fileID: 0}
-  locomotionMode: 0
 --- !u!136 &136110050752392742
 CapsuleCollider:
   m_ObjectHideFlags: 1
