@@ -58,6 +58,14 @@ public class GraphManager : MonoBehaviour {
         //gui.current_rot = current_rot.y + theta;
     }
 
+    public void scaleGraph(float scaleRate) {
+        transform.localScale += new Vector3(scaleRate, scaleRate, scaleRate);
+        if (isVectorMode)
+            vectorField.generate();
+        else
+            particleGraph.generate();
+    }
+
 	//chan
 	public string nextFunction()
 	{
