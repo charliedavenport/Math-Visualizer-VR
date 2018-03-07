@@ -95,8 +95,8 @@ public class GraphManager : MonoBehaviour {
 				vectorField.generate();
 			else
 				particleGraph.generate();
-			yield return new WaitForSeconds(incr);
-			//yield return null;
+			//yield return new WaitForSeconds(incr);
+			yield return null;
 		}
 		isRotating = false;
 			

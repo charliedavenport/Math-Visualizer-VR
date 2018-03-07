@@ -34,7 +34,7 @@ public class VectorField : MonoBehaviour {
     private static Vector3 spiral_up(Vector3 input) {
         return new Vector3(
             -input.z,
-            0.5f,
+            0.1f,
             input.x);
     }
 
@@ -177,24 +177,25 @@ public class VectorField : MonoBehaviour {
     IEnumerator draw_solution(Vector3 start) {
 		start_pos = start;
 		start_pos_indicator.gameObject.SetActive(true);
-		start_pos_indicator.localPosition = normalize_pos(start);
+		start_pos_indicator.localPosition = start; //normalize_pos(start);
 		if (lr.positionCount > 0) resetSolutionCurve();
         Vector3 pos = start;
         //Vector3[] positions = new Vector3[10];
-        for (int i = 0; i < 40; i++) {
+        for (int i = 0; i < 200; i++) {
             //positions[i] = pos;
             lr.positionCount = i + 1;
             
             //Debug.Log(pos);
-            lr.SetPosition(i, normalize_pos(pos));
-			pos += 0.1f * current_func(pos);
+            lr.SetPosition(i, pos);
+			pos += 0.05f * current_func(pos);
 
 			//break out if out of bounds
-			if (pos.x >= x_max || pos.x <= x_min || pos.y >= y_max || pos.y <= y_min || pos.z >= z_max || pos.z <= z_min)
+			if (pos.x >= x_max * 1.5 || pos.x <= x_min * 1.5 || pos.y >= y_max * 1.5 || pos.y <= y_min * 1.5 || pos.z >= z_max * 1.5 || pos.z <= z_min * 1.5)
 			{
-				//break;
+				break;
 			}
-            yield return new WaitForSeconds(0.05f);
+            //yield return new WaitForSeconds(0.05f);
+            yield return null;
         }
 
     }

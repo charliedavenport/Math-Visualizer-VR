@@ -10,11 +10,14 @@ public class InteractionZone : MonoBehaviour {
 	public GraphManager mainGraph;
 	public VRPlayer player;
 
+	public bool a_btn;
+
 	private bool set;
 
 	// Use this for initialization
 	void Start () {
 		set = false;
+		a_btn = false;
 	}
 	
 	// Update is called once per frame
@@ -42,10 +45,11 @@ public class InteractionZone : MonoBehaviour {
 			if (!set)
 			{
 				start_pos_indicator.position = Vector3.Lerp(start_pos_indicator.position, other.transform.position, 0.5f);
-				if (player.triggerRight > 0.8f)
+				if (a_btn)
 				{
 					set = true;
 					mainGraph.vectorField.new_solution_curve(start_pos_indicator.localPosition);
+					Debug.Log("drawing new solution curve");
 				}
 			}
 		}

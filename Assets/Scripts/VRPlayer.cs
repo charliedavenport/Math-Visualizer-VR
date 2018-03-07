@@ -17,6 +17,7 @@ public class VRPlayer : NetworkBehaviour
 
     public GameManager gm;
 	public GUIController gui; // pass controller input into this
+    public InteractionZone interactionZone; // and this (Charlie)
 
     public Transform SteamVR_Rig;
     //public Transform hmd;
@@ -26,8 +27,6 @@ public class VRPlayer : NetworkBehaviour
     public SteamVR_TrackedObject hmd2;
     public SteamVR_TrackedObject controllerLeft;
     public SteamVR_TrackedObject controllerRight;
-
-	public float triggerRight;
 
     //public enum LocomotionMode { TELEPORT };
     //public LocomotionMode locomotionMode = LocomotionMode.TELEPORT;
@@ -211,7 +210,10 @@ public class VRPlayer : NetworkBehaviour
 		rightHand.controllerAngularVelocity = getControllerAngularVelocity(controllerRight);
 
 		float triggerLeft = getTrigger(controllerLeft);
-		triggerRight = getTrigger(controllerRight); // made public for InteractionZone.cs
+		float triggerRight = getTrigger(controllerRight); 
+        bool a_btn = SteamVR_Controller.Input(indexRight).GetPressDown(Valve.VR.EVRButtonId.k_EButton_A);
+        interactionZone.a_btn = a_btn;
+
 
 		Vector2 joyLeft = getJoystick(controllerLeft);
 		gui.handleInput(joyLeft);
