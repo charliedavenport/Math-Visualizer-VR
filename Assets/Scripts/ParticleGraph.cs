@@ -35,8 +35,10 @@ public class ParticleGraph : MonoBehaviour {
     public List<string> function_descriptions;
 	public int current_func_index;
 
+    private string timestamp;
+
 	static float sin_xz(float x, float z) {
-        return Mathf.Sin(x * z);
+        return Mathf.Sin(x * z) / 3f;
     }
     static float xz(float x, float z) {
         return x * z / 6f;
@@ -114,6 +116,8 @@ public class ParticleGraph : MonoBehaviour {
 
     void Awake () {
         ps = GetComponent<ParticleSystem>();
+
+        timestamp = System.DateTime.Now.ToString("yyyyMMddHHmmss");
 
 		functions = new List<GraphFunc>
 		{

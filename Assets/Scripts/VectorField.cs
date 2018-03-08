@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.IO;
 
 [RequireComponent(typeof(ParticleSystem), typeof(LineRenderer))]
 public class VectorField : MonoBehaviour {
@@ -26,6 +28,8 @@ public class VectorField : MonoBehaviour {
 	public List<string> function_names;
     public List<string> function_descriptions;
 	public int current_func_index;
+
+    private string timestamp;
 
     // identity function: f(x,y,z) = (x,y,z) 
     private static Vector3 identity(Vector3 input) {
@@ -64,7 +68,9 @@ public class VectorField : MonoBehaviour {
     private void Awake() {
         ps = GetComponent<ParticleSystem>();
         lr = GetComponent<LineRenderer>();
-		//lr.positionCount = 20;
+        //lr.positionCount = 20;
+
+        timestamp = System.DateTime.Now.ToString("yyyyMMddHHmmss");
 
 		functions = new List<VectorFunc>
 		{
@@ -188,7 +194,7 @@ public class VectorField : MonoBehaviour {
 		if (lr.positionCount > 0) resetSolutionCurve();
         Vector3 pos = start;
         //Vector3[] positions = new Vector3[10];
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 750; i++) {
             //positions[i] = pos;
             lr.positionCount = i + 1;
             
@@ -204,7 +210,41 @@ public class VectorField : MonoBehaviour {
             //yield return new WaitForSeconds(0.05f);
             yield return null;
         }
+        writeCurveToFile();
+    }
 
+    private void writeCurveToFile()
+    {
+
+        string path = Directory.GetCurrentDirectory() + "\\log_" + timestamp + ".txt";
+        string[] dataEntry = new string[3 + lr.positionCount];
+        dataEntry[0] = "Function:  " + function_names[current_func_index];
+        dataEntry[1] = "Start Pos: " + start_pos.ToString();
+        dataEntry[2] = "Time:      " + Time.time;
+
+        Vector3[] curveData = new Vector3[lr.positionCount];
+        lr.GetPositions(curveData);
+
+        for (int i = 0; i < lr.positionCount; i++)
+        {
+            dataEntry[3 + i] = curveData[i].ToString();
+        }
+
+        if (File.Exists(path))
+        {
+            using (System.IO.StreamWriter file =
+                new System.IO.StreamWriter(path, true))
+            {
+                foreach (string line in dataEntry)
+                {
+                    file.WriteLine(line);
+                }
+            }
+        }
+        else
+        {
+            System.IO.File.WriteAllLines(path, dataEntry);
+        }
     }
 
 }
