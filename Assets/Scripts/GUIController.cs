@@ -10,12 +10,9 @@ public class GUIController : MonoBehaviour {
 	public Text rotate_text;
 	public Text func_text;
 	public Text func_index;
-    public Text scale_text;
+	public Image function_select;
     public Image mode_select;
 	public Image rotate_select;
-    public Image scale_select;
-    public Image function_select;
-
 	public GraphManager mainGraph;
 
 	private RectTransform rect;
@@ -24,7 +21,6 @@ public class GUIController : MonoBehaviour {
 	private string current_func;
 	private int current_func_index;
 	public float current_rot;
-    public float current_scale;
 
     private int selection; //between 0 and 2. 0 means 'Mode Text', 1 means 'Rotate Text', 2 means 'Function Text'
 	private bool wait_for_reset; //used in handling controller input
@@ -53,7 +49,6 @@ public class GUIController : MonoBehaviour {
 	void Update () {
 		mode_text.text = "Mode: " + (isVectorMode? "Vector Field" : "3D Graph");
 		rotate_text.text = "Rotation: " + current_rot.ToString("F");
-        scale_text.text = "Scale: " + current_scale.ToString("F");
 		func_text.text = "" + current_func;
 		func_index.text = "Function: " + current_func_index;
 	}
@@ -80,8 +75,7 @@ public class GUIController : MonoBehaviour {
 			else if (Mathf.Abs(x_speed) >= 0.8f)
 			{
 				wait_for_reset = true;
-                bool pos = x_speed > 0;
-                switch (selection)
+				switch (selection)
 				{
 					case 0: // Mode
 						isVectorMode = !isVectorMode;
@@ -92,19 +86,14 @@ public class GUIController : MonoBehaviour {
 					case 1: // Rotate
 						if (!mainGraph.isRotating)
 						{
+							bool pos = (x_speed > 0);
 							mainGraph.rotateGraph(pos ? 30 : -30);
 							current_rot += (pos ? 30 : -30);
 							if (current_rot >= 360f) current_rot -= 360f;
 							else if (current_rot <= -360f) current_rot += 360f;
 						}
 						break;
-                    case 2: // Scale
-                        wait_for_reset = false;
-                        float scaleRate = pos ? 0.01f : -0.01f;
-                        current_scale += scaleRate;
-                        mainGraph.scaleGraph(scaleRate);
-                        break;
-					case 3: // Function
+					case 2: // Function
 						current_func = (x_speed > 0) ? mainGraph.nextFunction() : mainGraph.prevFunction();
 						current_func_index = mainGraph.getCurrentFunctionIndex();
 						break;
