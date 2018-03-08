@@ -35,8 +35,6 @@ public class ParticleGraph : MonoBehaviour {
     public List<string> function_descriptions;
 	public int current_func_index;
 
-    private string timestamp;
-
 	static float sin_xz(float x, float z) {
         return Mathf.Sin(x * z) / 3f;
     }
@@ -117,7 +115,6 @@ public class ParticleGraph : MonoBehaviour {
     void Awake () {
         ps = GetComponent<ParticleSystem>();
 
-        timestamp = System.DateTime.Now.ToString("yyyyMMddHHmmss");
 
 		functions = new List<GraphFunc>
 		{
@@ -175,11 +172,11 @@ public class ParticleGraph : MonoBehaviour {
             for (int x = 0; x < n_particles_x; x++) {
                 particles[i].position = normalize_pos(new Vector3(x_val, current_func(x_val, z_val), z_val));
 
-                if (particles[i].position.y < y_min || particles[i].position.y > y_max) {
+                if (particles[i].position.y < y_min * graph_scale_factor || particles[i].position.y > y_max * graph_scale_factor) {
                     particles[i].startColor = Color.clear; // particles outside of y-bounds are invisible
                 }
                 else particles[i].startColor =
-                        Color.HSVToRGB((particles[i].position.y - y_min) / (y_max - y_min), 1, 1); //normalize [ymin, ymax] to [0,1]
+                        Color.HSVToRGB((particles[i].position.y - (graph_scale_factor * y_min)) / (graph_scale_factor * (y_max - y_min)), 1, 1); //normalize [ymin, ymax] to [0,1]
                 //particles[i].startColor = new Color(particles[i].startColor.r, particles[i].startColor.g, particles[i].startColor.b, 0.5f);
                 particles[i].startSize = start_size;
                 x_val += incr;
