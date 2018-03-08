@@ -9,11 +9,15 @@ public class GraphManager : MonoBehaviour {
 	public VectorField vectorField;
     public GUIController gui;
 
+    public Transform start_pos_sphere;
+
 	public bool isRotating;
+    public bool isScaling;
 
 	// Use this for initialization
 	void Start () {
 		isRotating = false;
+        isScaling = false;
 
 		if (isVectorMode) {
 			particleGraph.gameObject.SetActive(false);
@@ -33,12 +37,14 @@ public class GraphManager : MonoBehaviour {
 		vectorField.start_pos_indicator.gameObject.SetActive(false);//reset whenever mode is changed
 		isVectorMode = isVec;
 		if (isVectorMode) {
+            start_pos_sphere.gameObject.SetActive(true);
 			particleGraph.gameObject.SetActive(false);
 			vectorField.gameObject.SetActive(true);
 			vectorField.generate();
 		}
 		else {
-			particleGraph.gameObject.SetActive(true);
+            start_pos_sphere.gameObject.SetActive(false);
+            particleGraph.gameObject.SetActive(true);
 			vectorField.gameObject.SetActive(false);
 			particleGraph.generate();
 		}
@@ -62,8 +68,8 @@ public class GraphManager : MonoBehaviour {
         transform.localScale += new Vector3(scaleRate, scaleRate, scaleRate);
         //vectorField.transform.localScale = this.transform.localScale;
         //particleGraph.transform.localScale = this.transform.localScale;
-        vectorField.scale_factor += scaleRate * 0.5f;
-        particleGraph.graph_scale_factor += scaleRate * 0.5f;
+        vectorField.scale_factor += scaleRate;
+        particleGraph.graph_scale_factor += scaleRate;
         if (isVectorMode)
             vectorField.generate();
         else
@@ -94,11 +100,30 @@ public class GraphManager : MonoBehaviour {
 		return isVectorMode ? vectorField.current_func_index : particleGraph.current_func_index;
 	}
 
+    IEnumerator lerp_scale(Vector3 start_scale, Vector3 end_scale)
+    {
+        isScaling = true;
+        float total_time = .25f;
+        int n_iter = 5;
+        float incr = total_time / (float)n_iter;
+        for (float t = 0f; t <= total_time; t += incr)
+        {
+            transform.localScale = Vector3.Lerp(start_scale, end_scale, t);
+            //vectorField.start_pos_indicator.localScale
+            if (isVectorMode)
+                vectorField.generate();
+            else
+                particleGraph.generate();
+            yield return null;
+        }
+        isScaling = false;
+    }
+
 	IEnumerator lerp_rotation(Quaternion start_rot, Quaternion end_rot)
 	{
 		isRotating = true;
 		float total_time = .25f;
-		int n_iter = 10;
+		int n_iter = 5;
 		float incr = total_time / (float)n_iter;
 		for (float t = 0f; t <= total_time ; t += incr)
 		{

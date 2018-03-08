@@ -9,14 +9,15 @@ public class InteractionZone : MonoBehaviour {
 	public Transform start_pos_indicator;
 	public GraphManager mainGraph;
 	public VRPlayer player;
+    public Transform start_pos_sphere;
 
 	public bool a_btn;
 
-	private bool set;
+	//private bool set;
 
 	// Use this for initialization
 	void Start () {
-		set = false;
+		//set = false;
 		a_btn = false;
 	}
 	
@@ -27,7 +28,7 @@ public class InteractionZone : MonoBehaviour {
 
 	private void OnTriggerEnter(Collider other)
 	{
-		set = false;
+		//set = false;
 		//Debug.Log("InteractionZone: OnTriggerEnter()");
 		if (other.gameObject.tag == "rightController" && mainGraph.isVectorMode)
 		{
@@ -42,16 +43,16 @@ public class InteractionZone : MonoBehaviour {
 		if (other.gameObject.tag == "rightController" && mainGraph.isVectorMode)
 		{
 			// lerp sphere to controller location
-			if (!set)
+			
+			start_pos_indicator.position = Vector3.Lerp(start_pos_indicator.position, other.transform.position, 0.5f);
+			if (a_btn)
 			{
-				start_pos_indicator.position = Vector3.Lerp(start_pos_indicator.position, other.transform.position, 0.5f);
-				if (a_btn)
-				{
-					set = true;
-					mainGraph.vectorField.new_solution_curve(start_pos_indicator.localPosition);
-					Debug.Log("drawing new solution curve");
-				}
+                start_pos_sphere.gameObject.SetActive(true);
+                start_pos_sphere.transform.position = start_pos_indicator.transform.position;
+				mainGraph.vectorField.new_solution_curve(start_pos_sphere.transform.localPosition);
+				Debug.Log("drawing new solution curve");
 			}
+			
 		}
 	}
 
@@ -59,7 +60,7 @@ public class InteractionZone : MonoBehaviour {
 	{
 		if (other.gameObject.tag == "rightController")
 		{
-			start_pos_indicator.localPosition = mainGraph.vectorField.start_pos;
+            start_pos_indicator.gameObject.SetActive(false);
 		}
 
 	}

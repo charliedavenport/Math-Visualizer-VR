@@ -99,8 +99,11 @@ public class GUIController : MonoBehaviour {
 						}
 						break;
                     case 2:
-                        mainGraph.scaleGraph(pos ? 0.1f : -0.1f);
-                        current_scale = mainGraph.transform.localScale.x;
+                        if (!mainGraph.isScaling)
+                        {
+                            mainGraph.scaleGraph(pos ? 0.25f : -0.25f);
+                            current_scale = mainGraph.transform.localScale.x;
+                        }
                         break;
 					case 3: // Function
 						current_func = (pos) ? mainGraph.nextFunction() : mainGraph.prevFunction();
