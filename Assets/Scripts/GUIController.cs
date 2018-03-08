@@ -8,6 +8,7 @@ public class GUIController : MonoBehaviour {
 	//public Transform player;
 	public Text mode_text;
 	public Text rotate_text;
+    public Text scale_text;
 	public Text func_text;
     public Text func_index;
     public Image mode_select;
@@ -22,6 +23,7 @@ public class GUIController : MonoBehaviour {
 	private string current_func;
 	private int current_func_index;
 	public float current_rot;
+    public float current_scale;
 
     private int selection; //between 0 and 2. 0 means 'Mode Text', 1 means 'Rotate Text', 2 means 'Function Text'
 	private bool wait_for_reset; //used in handling controller input
@@ -39,6 +41,7 @@ public class GUIController : MonoBehaviour {
 
 		current_func = mainGraph.getCurrentFunctionName();
 		current_func_index = mainGraph.getCurrentFunctionIndex();
+        current_scale = 1f;
 
         mode_select.gameObject.SetActive(true);
         rotate_select.gameObject.SetActive(false);
@@ -50,6 +53,7 @@ public class GUIController : MonoBehaviour {
 	void Update () {
 		mode_text.text = "Mode: " + (isVectorMode? "Vector Field" : "3D Graph");
 		rotate_text.text = "Rotation: " + current_rot.ToString("F");
+        scale_text.text = "Scale: " + current_scale; 
 		func_text.text = "" + current_func;
 		func_index.text = "Function: " + current_func_index;
 	}
@@ -75,7 +79,8 @@ public class GUIController : MonoBehaviour {
 			}
 			else if (Mathf.Abs(x_speed) >= 0.8f)
 			{
-				wait_for_reset = true;
+                bool pos = (x_speed > 0);
+                wait_for_reset = true;
 				switch (selection)
 				{
 					case 0: // Mode
@@ -87,15 +92,18 @@ public class GUIController : MonoBehaviour {
 					case 1: // Rotate
 						if (!mainGraph.isRotating)
 						{
-							bool pos = (x_speed > 0);
 							mainGraph.rotateGraph(pos ? 30 : -30);
 							current_rot += (pos ? 30 : -30);
 							if (current_rot >= 360f) current_rot -= 360f;
 							else if (current_rot <= -360f) current_rot += 360f;
 						}
 						break;
-					case 2: // Function
-						current_func = (x_speed > 0) ? mainGraph.nextFunction() : mainGraph.prevFunction();
+                    case 2:
+                        mainGraph.scaleGraph(pos ? 0.1f : -0.1f);
+                        current_scale = mainGraph.transform.localScale.x;
+                        break;
+					case 3: // Function
+						current_func = (pos) ? mainGraph.nextFunction() : mainGraph.prevFunction();
 						current_func_index = mainGraph.getCurrentFunctionIndex();
 						break;
 					default: // ERROR
@@ -118,7 +126,7 @@ public class GUIController : MonoBehaviour {
     }
 
     public void moveSelectionDown() {
-        if (selection < 3) selection++;
+        if (selection < 4) selection++;
         updateSelection();
     }
 
