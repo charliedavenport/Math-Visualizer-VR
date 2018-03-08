@@ -9,10 +9,11 @@ public class GUIController : MonoBehaviour {
 	public Text mode_text;
 	public Text rotate_text;
 	public Text func_text;
-	public Text func_index;
-	public Image function_select;
+    public Text func_index;
     public Image mode_select;
 	public Image rotate_select;
+    public Image scale_select;
+    public Image function_select;
 	public GraphManager mainGraph;
 
 	private RectTransform rect;
